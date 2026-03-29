@@ -1485,7 +1485,7 @@ function buildAutocomplete(){
 
 // ── Export / Import ──
 function exportJSON(){
-  const data=localStorage.getItem('cinelog-data')||'[]';
+  const data=JSON.stringify(entries,null,2);
   const blob=new Blob([data],{type:'application/json'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
@@ -1527,23 +1527,27 @@ function exportCSV(){
 
 function importJSON(file){
   const reader=new FileReader();
-  reader.onload=e=>{
+  reader.onload=async e=>{
     try{
       const data=JSON.parse(e.target.result);
       if(!Array.isArray(data))throw new Error('Invalid format');
-      const existing=entries.length;
-      // Merge by id — new entries added, existing updated
-      const idMap={};entries.forEach(en=>idMap[en.id]=en);
-      let added=0,updated=0;
-      data.forEach(en=>{
-        if(!en.id||!en.title)return;
-        if(idMap[en.id]){Object.assign(idMap[en.id],en);updated++;}
-        else{entries.push(en);added++;}
-      });
-      save();render();updateStats();updateGenreFilter();
-      toast(`Imported: ${added} new, ${updated} updated`,'success');
+      // Replace all entries
+      entries.length=0;
+      data.forEach(en=>{if(en.id&&en.title)entries.push(en);});
+      // Save locally first
+      localStorage.setItem('cinelog-data',JSON.stringify(entries));
+      render();updateStats();updateGenreFilter();
+      toast(`Importing ${entries.length} entries...`,'success');
+      // Force sync to Firebase
+      if(window._fbSave){
+        await window._fbSave(entries);
+        toast(`✓ ${entries.length} entries synced to Firebase!`,'success');
+      }else{
+        toast(`✓ ${entries.length} entries imported`,'success');
+      }
     }catch(err){
-      toast('Invalid backup file','error');
+      console.error('Import error:',err);
+      toast('Import failed: '+err.message,'error');
     }
   };
   reader.readAsText(file);
