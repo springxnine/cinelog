@@ -367,13 +367,77 @@ body.dark .card-rating{color:#f0f0f0;}
 .pf-btn:hover{border-color:#aaa;color:#555;}
 .pf-btn.active{background:#1e1e1e;color:white;border-color:#1e1e1e;}
 @media(max-width:768px){
-  .topbar{padding:0 14px;}.topbar-sub{display:none;}
-  .dashboard{grid-template-columns:1fr;}
-  .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid #e4e4e4;}
-  .main-sticky{left:0;padding:10px 14px 0;}
-  .main-content{padding:12px 14px 20px;}
-  .entries-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
-  .form-panel{width:96vw;min-width:unset;border-radius:12px;}
+  /* Topbar */
+  .topbar{padding:0 12px;height:50px;}
+  .topbar-sub{display:none;}
+  .topbar-logo{font-size:16px;}
+  .topbar-tagline{display:none;}
+  .btn{font-size:11px;padding:6px 10px;}
+
+  /* Layout: sidebar hidden by default, shown as collapsible */
+  .dashboard{grid-template-columns:1fr;min-height:unset;}
+  .sidebar{
+    display:none;
+    position:fixed;
+    inset:50px 0 0 0;
+    z-index:300;
+    height:calc(100vh - 50px);
+    overflow-y:auto;
+    background:#f4f4f4;
+    border-right:none;
+    border-bottom:none;
+  }
+  .sidebar.mobile-open{display:block;}
+  body.dark .sidebar{background:#18181b;}
+
+  /* Main content full width */
+  .main{width:100%;}
+  .main-sticky{left:0;padding:8px 12px 0;top:50px;}
+  .main-content{padding:10px 12px 80px;}
+
+  /* Toolbar compact */
+  .toolbar{flex-wrap:wrap;gap:6px;}
+  .search-box{min-width:0;flex:1;}
+  .sel{font-size:12px;padding:6px 8px;}
+  .filter-sort-row{display:flex;gap:6px;flex-wrap:wrap;}
+
+  /* Status filter scrollable */
+  .sp-group{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;padding-bottom:4px;}
+  .sp{white-space:nowrap;font-size:11px;padding:5px 10px;}
+
+  /* Grid: 2 columns */
+  .entries-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .entries-grid.poster-only{grid-template-columns:repeat(3,1fr);gap:6px;}
+
+  /* Card */
+  .card-title{font-size:11px;}
+  .card-info-row{flex-wrap:wrap;gap:3px;}
+
+  /* Forms full screen */
+  .form-overlay{align-items:flex-end;}
+  .form-panel{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;}
+  .modal{align-items:flex-end;}
+  .modal-box{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;}
+
+  /* Drawer full screen */
+  .detail-drawer{width:100vw;right:-100vw;}
+  .detail-drawer.open{right:0;}
+
+  /* View toggle */
+  .view-toggle{gap:4px;}
+
+  /* Back to top */
+  #btnBackTop{bottom:16px;right:16px;width:36px;height:36px;font-size:16px;}
+}
+
+/* Mobile sidebar toggle button */
+#btnMobileMenu{display:none;}
+@media(max-width:768px){
+  #btnMobileMenu{
+    display:flex;align-items:center;justify-content:center;
+    background:none;border:none;color:white;font-size:20px;
+    cursor:pointer;padding:4px 8px;margin-right:4px;
+  }
 }
 .ssb-icon svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
 /* Platform badge */
@@ -798,6 +862,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
 <body>
 <div id="toast" class="toast"></div>
 <div class="topbar">
+  <button id="btnMobileMenu" title="Menu" onclick="document.querySelector('.sidebar').classList.toggle('mobile-open')">☰</button>
   <div class="topbar-brand">
     <span class="topbar-title">
       <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1374,6 +1439,19 @@ onSnapshot(DATA_DOC, (snap) => {
     }
   } catch(e) {}
 });
+
+const SETTINGS_DOC = doc(db, 'cinelog', 'settings');
+
+window._fbSaveSettings = async function(data) {
+  try { await setDoc(SETTINGS_DOC, data, {merge: true}); } catch(e) { console.error('Settings save error:', e); }
+};
+
+window._fbLoadSettings = async function() {
+  try {
+    const snap = await getDoc(SETTINGS_DOC);
+    return snap.exists() ? snap.data() : null;
+  } catch(e) { return null; }
+};
 
 window._fbReady = true;
 console.log('Firebase ready ✓');
@@ -2605,7 +2683,19 @@ function emptyStateHTML(filter){
   return`<div class="empty-state"><div class="empty-icon">${s.icon}</div><div class="empty-title">${s.title}</div><div class="empty-sub">${s.sub}</div></div>`;
 }
 // ── Sort ──
-function rts(en){if(!en.releaseDate)return 0;if(en.releaseDate.startsWith('{')){try{return parseInt(JSON.parse(en.releaseDate).s)||0;}catch(e){return 0;}}return new Date(en.releaseDate+'T00:00:00').getTime()||0;}
+function rts(en){
+  if(!en.releaseDate)return 0;
+  if(en.releaseDate.startsWith('{')){
+    try{
+      const p=JSON.parse(en.releaseDate);
+      const yr=parseInt(p.s)||0;
+      return yr?new Date(yr+'-01-01T00:00:00').getTime():0;
+    }catch(e){return 0;}
+  }
+  // Full date string
+  const t=new Date(en.releaseDate+'T00:00:00').getTime();
+  return isNaN(t)?0:t;
+}
 function getSorted(arr){
   const s=document.getElementById('sortBy').value,c=[...arr];
   if(s==='added')c.sort((a,b)=>b.id-a.id);
@@ -2778,10 +2868,16 @@ function updateStats(){
     }
     (e.epLogs||[]).filter(l=>l.date).forEach(l=>{
       const epLabel=l.season&&l.episode?` · S${String(l.season).padStart(2,'0')}E${String(l.episode).padStart(2,'0')}`:'';
-      lwCandidates.push({title:e.title,date:l.date,ep:epLabel});
+      lwCandidates.push({title:e.title,date:l.date,ep:epLabel,season:l.season||0,episode:l.episode||0});
     });
   });
-  lwCandidates.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  lwCandidates.sort((a,b)=>{
+    const dd=new Date(b.date)-new Date(a.date);
+    if(dd!==0)return dd;
+    // tiebreak: higher season/episode wins
+    if(b.season!==a.season)return (b.season||0)-(a.season||0);
+    return (b.episode||0)-(a.episode||0);
+  });
   const lwEl=document.getElementById('stLastWatched');
   if(lwCandidates.length){
     const last=lwCandidates[0];
@@ -2972,12 +3068,19 @@ function renderWatchInsights(){
   const busiestEps=busiest?dayEps[busiest]||0:0;
   const busiestTitles=busiest?dayCount[busiest]||0:0;
   // Count movies and series eps for busiest day
-  const busiestMovies=busiest?entries.filter(e=>e.type==='movie'&&e.date===busiest).length:0;
+  // Count movies and series separately for busiest day using dayCount data
+  const dayMovies={},daySeries={};
+  entries.filter(e=>e.date&&!e.date.endsWith('-01-01')&&(e.status==='watched'||e.status==='favorite')).forEach(e=>{
+    if(e.type==='movie'){dayMovies[e.date]=(dayMovies[e.date]||0)+1;}
+    else{daySeries[e.date]=(daySeries[e.date]||0)+1;}
+  });
+  const busiestMovies=busiest?dayMovies[busiest]||0:0;
   const busiestSeriesEps=busiest?dayEps[busiest]||0:0;
+  const busiestSeriesTitles=busiest?daySeries[busiest]||0:0;
   const busiestParts=[];
   if(busiestMovies>0)busiestParts.push(`🎬 ${busiestMovies}`);
   if(busiestSeriesEps>0)busiestParts.push(`📺 ${busiestSeriesEps} eps`);
-  else if(busiestTitles>busiestMovies)busiestParts.push(`📺 ${busiestTitles-busiestMovies}`);
+  else if(busiestSeriesTitles>0)busiestParts.push(`📺 ${busiestSeriesTitles}`);
   const busiestSub=busiestParts.join(' · ')||`${busiestTitles} watched`;
 
   // Avg per month
@@ -3462,6 +3565,11 @@ function adjustMainPadding(){
   if(bar&&content)content.style.paddingTop=(bar.offsetHeight+8)+'px';
 }
 window.addEventListener('load',adjustMainPadding);
+// Close mobile sidebar when clicking main area
+document.querySelector('.main')?.addEventListener('click',function(){
+  const sb=document.querySelector('.sidebar');
+  if(sb&&sb.classList.contains('mobile-open'))sb.classList.remove('mobile-open');
+});
 window.addEventListener('resize',adjustMainPadding);
 // Also call after render
 const _origRender=render;
@@ -3892,7 +4000,22 @@ document.getElementById('btnYearReview').addEventListener('click',openYearReview
 
 // ── Goal ──
 let watchGoal=JSON.parse(localStorage.getItem('cinelog-goal')||'null');
-function saveGoal(){localStorage.setItem('cinelog-goal',JSON.stringify(watchGoal));}
+function saveGoal(){
+  localStorage.setItem('cinelog-goal',JSON.stringify(watchGoal));
+  // Sync to Firebase
+  if(window._fbSaveSettings)window._fbSaveSettings({goal:watchGoal});
+}
+function loadGoalFromFirebase(){
+  if(window._fbLoadSettings){
+    window._fbLoadSettings().then(s=>{
+      if(s&&s.goal!==undefined){
+        watchGoal=s.goal;
+        localStorage.setItem('cinelog-goal',JSON.stringify(watchGoal));
+        renderGoal();
+      }
+    });
+  }
+}
 function renderGoal(){
   const el=document.getElementById('goalDisplay');if(!el)return;
   const yr=new Date().getFullYear();
@@ -3971,7 +4094,7 @@ document.getElementById('epLogOverlay').addEventListener('click',closeEpLog);
 
 // ── Init ──
 window.addEventListener('load',function(){
-  renderGoal();renderTasteProfile();detectBinge();
+  renderGoal();renderTasteProfile();detectBinge();loadGoalFromFirebase();
   const btnEG=document.getElementById('btnEditGoal');
   if(btnEG)btnEG.addEventListener('click',openGoalModal);
 });
@@ -4217,7 +4340,14 @@ async function runAI(en,mode){
     const label=mode==='recap'?'📝 AI Recap':'💡 Why You Liked This';
     res.innerHTML=`<div class="ai-result-box"><div class="ai-result-label">${label}</div>${esc(text).replace(/\n/g,'<br>')}</div>`;
   }catch(err){
-    res.innerHTML='<div class="ai-result-box" style="color:#ef4444;">Failed to connect. Try again.</div>';
+    // CORS issue on GitHub Pages - show prompt to copy to Claude instead
+    const label=mode==='recap'?'📝 AI Recap':'💡 Why You Liked This';
+    res.innerHTML=`<div class="ai-result-box">
+      <div class="ai-result-label">${label}</div>
+      <div style="margin-bottom:8px;color:#888;font-size:11px;">AI ต้องการ server — copy prompt นี้ไปวางใน Claude.ai แทนได้เลย:</div>
+      <div style="background:#f0f0ff;border-radius:6px;padding:8px;font-size:11px;color:#333;line-height:1.6;">${esc(prompt)}</div>
+      <button onclick="navigator.clipboard.writeText(${JSON.stringify(prompt)}).then(()=>toast('Copied!','success'))" style="margin-top:8px;padding:5px 10px;background:#6366f1;color:white;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">Copy prompt</button>
+    </div>`;
   }
   btn.disabled=false;
 }
