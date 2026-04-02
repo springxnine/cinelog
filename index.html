@@ -440,47 +440,66 @@ body.dark .card-rating{color:#f0f0f0;}
   }
 }
 
-/* ── Mobile warm light theme ── */
+
+/* ── Mobile UI ── */
 @media(max-width:768px){
-  :root{
-    --mob-bg: #faf8f5;
-    --mob-sidebar: #f5f2ee;
-    --mob-card: #ffffff;
-    --mob-border: #ede9e3;
-    --mob-text: #2c2417;
-    --mob-text-sub: #8c7e6a;
-    --mob-accent: #c0855a;
-    --mob-sticky: #faf8f5;
-  }
-  body{background:var(--mob-bg);}
-  .sidebar{background:var(--mob-sidebar)!important;}
-  .main-sticky{background:var(--mob-bg)!important;}
-  .entry-card{background:var(--mob-card);border-color:var(--mob-border);}
-  .card-title{color:var(--mob-text);}
-  .topbar{background:linear-gradient(135deg,#3d2b1f,#5c3d2e);}
-  /* Stat cards warm */
-  .stat-card.sc-total,.stat-card.sc-avg,.stat-card.sc-series,.stat-card.sc-movies{
-    background:linear-gradient(135deg,#f5ede3,#ecd9c6)!important;
-  }
-  .stat-lbl{color:#5c3d2e!important;}
-  .stat-val{color:#2c1a0e!important;}
-  /* Status cards warm tones */
-  .ssb-card.watched{background:linear-gradient(135deg,#d4edda,#b8dfc4);}
-  .ssb-card.favorite{background:linear-gradient(135deg,#fde8f0,#f7c5d8);}
-  .ssb-card.watching{background:linear-gradient(135deg,#fff3cd,#fde9a0);}
-  .ssb-card.onhold{background:linear-gradient(135deg,#e8e0f5,#d4c5eb);}
-  .ssb-card.watchlist{background:linear-gradient(135deg,#d8f0f8,#b8e2f2);}
-  /* Sidebar sections */
-  .sb-section{border-bottom-color:var(--mob-border);}
-  .sb-title-text{color:var(--mob-text);}
-  .chart-ttl{color:var(--mob-text-sub);}
-  /* Filter buttons */
-  .sp{border-color:var(--mob-border);color:var(--mob-text-sub);}
-  .sp.active{background:#5c3d2e;color:white;border-color:#5c3d2e;}
-  /* Search */
-  .search-box input{background:white;border-color:var(--mob-border);}
-  /* Cards warm hover */
-  .entry-card:hover{box-shadow:0 8px 24px rgba(92,61,46,0.12);}
+  /* Compact toolbar - 2 rows max */
+  .toolbar{flex-wrap:wrap;gap:4px;padding-bottom:4px;}
+  .search-box{flex:1;min-width:0;}
+  .btn-clear-filters{font-size:11px;padding:5px 8px;}
+  .sel{font-size:11px;padding:5px 7px;}
+
+  /* Status pills - horizontal scroll, compact */
+  .sp-group{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:4px;flex-wrap:nowrap;padding:4px 0;scrollbar-width:none;}
+  .sp-group::-webkit-scrollbar{display:none;}
+  .sp{font-size:10px;padding:4px 10px;white-space:nowrap;flex-shrink:0;}
+  .sp-group-sep{display:none;}
+
+  /* View toggle - symbol only */
+  .vt-btn{width:36px!important;font-size:0;}
+  #btnViewGrid::before{content:'⊞';font-size:14px;}
+  #btnViewCal::before{content:'📅';font-size:13px;}
+
+  /* Poster 3 columns */
+  .entries-grid.poster-only{grid-template-columns:repeat(3,1fr);gap:6px;}
+  .entries-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+
+  /* Form slides up from bottom */
+  .form-overlay{align-items:flex-end;}
+  .form-panel{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;padding-top:env(safe-area-inset-top,16px);}
+  .modal{align-items:flex-end;}
+  .modal-box{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;}
+
+  /* Drawer full width */
+  .detail-drawer{width:100vw;right:-100vw;}
+  .detail-drawer.open{right:0;}
+
+  /* Main content */
+  .main-sticky{left:0;padding:8px 12px 0;top:50px;}
+  .main-content{padding:10px 12px 80px;}
+
+  /* Topbar */
+  .topbar{padding:0 12px;height:50px;}
+  .topbar-sub{display:none;}
+  .topbar-tagline{display:none;}
+
+  /* Layout */
+  .dashboard{grid-template-columns:1fr;}
+  .sidebar{display:none;position:fixed;inset:50px 0 0 0;z-index:300;height:calc(100vh - 50px);overflow-y:auto;background:#f4f4f4;}
+  .sidebar.mobile-open{display:block;}
+  body.dark .sidebar.mobile-open{background:#18181b;}
+  .main{width:100%;}
+
+  /* Back to top */
+  #btnBackTop{bottom:16px;right:16px;width:36px;height:36px;font-size:16px;}
+
+  /* iOS safe area */
+  .form-panel{padding-bottom:env(safe-area-inset-bottom,16px);}
+}
+
+#btnMobileMenu{display:none;}
+@media(max-width:768px){
+  #btnMobileMenu{display:flex;align-items:center;justify-content:center;background:none;border:none;color:white;font-size:20px;cursor:pointer;padding:4px 8px;margin-right:4px;}
 }
 
 .ssb-icon svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
@@ -3590,6 +3609,7 @@ document.getElementById('formOverlay').addEventListener('mouseup',e=>{if(_overla
 });
 
 load();render();updateStats();updateGenreFilter();initDarkMode();buildAutocomplete();initTmdbSearch();setCardView('poster');
+setTimeout(()=>{if(typeof renderGoal==='function'){renderGoal();if(typeof loadGoalFromFirebase==='function')loadGoalFromFirebase();}},100);
 
 // Fix content offset after toolbar renders
 function adjustMainPadding(){
@@ -3614,7 +3634,7 @@ render=function(){_origRender.apply(this,arguments);setTimeout(adjustMainPadding
 <!-- YEAR IN REVIEW -->
 <div id="yrOverlay" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:hidden;">
   <button id="yrClose" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.12);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:20px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;transition:background 0.2s;">&times;</button>
-  <div id="yrYearPicker" style="position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;"></div>
+  <div id="yrYearPicker" style="position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;max-width:60vw;overflow-x:auto;padding:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;"></div>
   <div id="yrSlides" style="width:100%;height:100%;position:relative;"></div>
   <div id="yrNav" style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;z-index:10;">
     <button id="yrPrev" style="background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;transition:background 0.2s;">‹</button>
