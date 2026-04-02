@@ -439,6 +439,50 @@ body.dark .card-rating{color:#f0f0f0;}
     cursor:pointer;padding:4px 8px;margin-right:4px;
   }
 }
+
+/* ── Mobile warm light theme ── */
+@media(max-width:768px){
+  :root{
+    --mob-bg: #faf8f5;
+    --mob-sidebar: #f5f2ee;
+    --mob-card: #ffffff;
+    --mob-border: #ede9e3;
+    --mob-text: #2c2417;
+    --mob-text-sub: #8c7e6a;
+    --mob-accent: #c0855a;
+    --mob-sticky: #faf8f5;
+  }
+  body{background:var(--mob-bg);}
+  .sidebar{background:var(--mob-sidebar)!important;}
+  .main-sticky{background:var(--mob-bg)!important;}
+  .entry-card{background:var(--mob-card);border-color:var(--mob-border);}
+  .card-title{color:var(--mob-text);}
+  .topbar{background:linear-gradient(135deg,#3d2b1f,#5c3d2e);}
+  /* Stat cards warm */
+  .stat-card.sc-total,.stat-card.sc-avg,.stat-card.sc-series,.stat-card.sc-movies{
+    background:linear-gradient(135deg,#f5ede3,#ecd9c6)!important;
+  }
+  .stat-lbl{color:#5c3d2e!important;}
+  .stat-val{color:#2c1a0e!important;}
+  /* Status cards warm tones */
+  .ssb-card.watched{background:linear-gradient(135deg,#d4edda,#b8dfc4);}
+  .ssb-card.favorite{background:linear-gradient(135deg,#fde8f0,#f7c5d8);}
+  .ssb-card.watching{background:linear-gradient(135deg,#fff3cd,#fde9a0);}
+  .ssb-card.onhold{background:linear-gradient(135deg,#e8e0f5,#d4c5eb);}
+  .ssb-card.watchlist{background:linear-gradient(135deg,#d8f0f8,#b8e2f2);}
+  /* Sidebar sections */
+  .sb-section{border-bottom-color:var(--mob-border);}
+  .sb-title-text{color:var(--mob-text);}
+  .chart-ttl{color:var(--mob-text-sub);}
+  /* Filter buttons */
+  .sp{border-color:var(--mob-border);color:var(--mob-text-sub);}
+  .sp.active{background:#5c3d2e;color:white;border-color:#5c3d2e;}
+  /* Search */
+  .search-box input{background:white;border-color:var(--mob-border);}
+  /* Cards warm hover */
+  .entry-card:hover{box-shadow:0 8px 24px rgba(92,61,46,0.12);}
+}
+
 .ssb-icon svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
 /* Platform badge */
 .plat-badge{position:absolute;bottom:7px;right:7px;font-size:8px;font-weight:800;padding:2px 5px;border-radius:3px;line-height:1.5;letter-spacing:0.3px;}
@@ -1353,18 +1397,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
       <div class="drawer-section-title">Notes</div>
       <div class="drawer-notes" id="drawerNotes"></div>
     </div>
-    <div class="drawer-section" id="drawerAiSection" style="display:none">
-      <div class="drawer-section-title" style="display:flex;align-items:center;justify-content:space-between;">
-        <span>✨ AI Discovery</span>
-      </div>
-      <div id="drawerAiContent">
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-          <button id="btnAiRecap" class="ai-btn">📝 AI Recap</button>
-          <button id="btnAiWhy" class="ai-btn">💡 Why You Liked This</button>
-        </div>
-        <div id="aiResult" style="display:none;"></div>
-      </div>
-    </div>
+
     <div class="drawer-section" id="drawerEpLogSection" style="display:none">
       <div class="drawer-section-title" style="display:flex;align-items:center;justify-content:space-between;">
         <span>Episode Log</span>
@@ -4080,7 +4113,7 @@ function renderTasteProfile(){
 const _origUS=updateStats;
 updateStats=function(){_origUS();renderGoal();detectBinge();renderTasteProfile();};
 
-// ── Patch openDrawer — bind +Ep and ep log ──
+// ── Patch openDrawer — bind +Ep, ep log, and AI ──
 const _origOD=openDrawer;
 openDrawer=function(id){
   _origOD(id);
@@ -4271,95 +4304,11 @@ document.addEventListener('keydown', function(e){
 </script>
 
 <style>
-.ai-btn{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;border:none;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity 0.15s;}
-.ai-btn:hover{opacity:0.85;}
-.ai-btn:disabled{opacity:0.5;cursor:not-allowed;}
-.ai-result-box{background:#f8f8ff;border:1px solid #e0e7ff;border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.7;color:#333;margin-top:4px;}
-.ai-result-box .ai-result-label{font-size:10px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
-.ai-loading{display:flex;align-items:center;gap:8px;font-size:12px;color:#aaa;padding:10px 0;}
-.ai-loading::before{content:'';width:14px;height:14px;border:2px solid #e0e7ff;border-top-color:#6366f1;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
-@keyframes spin{to{transform:rotate(360deg);}}
+}
 body.dark .ai-result-box{background:#1a1a2e;border-color:#312e81;color:#e4e4e4;}
 </style>
 
-<script>
-// ── AI Discovery ──
-let _aiEntryId=null;
 
-function initAiDrawer(en){
-  _aiEntryId=en.id;
-  const sec=document.getElementById('drawerAiSection');
-  const res=document.getElementById('aiResult');
-  if(!sec)return;
-  // Only show for watched/favorite
-  if(en.status==='watched'||en.status==='favorite'||en.status==='watching'){
-    sec.style.display='block';
-    res.style.display='none';res.innerHTML='';
-    document.getElementById('btnAiRecap').onclick=()=>runAI(en,'recap');
-    document.getElementById('btnAiWhy').onclick=()=>runAI(en,'why');
-  }else{
-    sec.style.display='none';
-  }
-}
-
-async function runAI(en,mode){
-  const res=document.getElementById('aiResult');
-  const btn=document.getElementById(mode==='recap'?'btnAiRecap':'btnAiWhy');
-  res.style.display='block';
-  res.innerHTML='<div class="ai-loading">Generating...</div>';
-  btn.disabled=true;
-
-  const genres=(en.genres||[]).join(', ')||'unknown genre';
-  const rating=en.rating?`rated ${en.rating}/10`:'no rating';
-  const platform=en.platform||'';
-  const epInfo=en.type==='series'&&en.season?`Season ${en.season}`:'';
-
-  let prompt='';
-  if(mode==='recap'){
-    prompt=`You are a witty movie/series companion. Write a fun, personal 2-3 sentence recap of "${en.title}" (${en.type}, ${genres}${epInfo?', '+epInfo:''}, ${platform}). Make it feel like you're talking to a friend. Be engaging, not formal. No spoilers beyond basic premise.`;
-  }else{
-    // Build taste profile from user's watched entries
-    const watched=entries.filter(e=>e.status==='watched'||e.status==='favorite');
-    const topGenres=Object.entries(watched.reduce((m,e)=>{(e.genres||[]).forEach(g=>{m[g]=(m[g]||0)+1;});return m;},{})).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([g])=>g).join(', ');
-    const avgRating=(watched.reduce((s,e)=>s+e.rating,0)/Math.max(watched.length,1)).toFixed(1);
-    prompt=`You are a film taste analyst. The user watches mostly ${topGenres||genres} content with an average rating of ${avgRating}/10. They ${rating==='no rating'?'haven\'t rated':'have rated'} "${en.title}" ${rating}. Write 2-3 sentences explaining in a personal, insightful way why this title likely resonated with them based on their taste profile. Be specific and conversational, not generic.`;
-  }
-
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:200,
-        messages:[{role:'user',content:prompt}]
-      })
-    });
-    const data=await resp.json();
-    const text=data.content?.[0]?.text||'Could not generate response.';
-    const label=mode==='recap'?'📝 AI Recap':'💡 Why You Liked This';
-    res.innerHTML=`<div class="ai-result-box"><div class="ai-result-label">${label}</div>${esc(text).replace(/\n/g,'<br>')}</div>`;
-  }catch(err){
-    // CORS issue on GitHub Pages - show prompt to copy to Claude instead
-    const label=mode==='recap'?'📝 AI Recap':'💡 Why You Liked This';
-    res.innerHTML=`<div class="ai-result-box">
-      <div class="ai-result-label">${label}</div>
-      <div style="margin-bottom:8px;color:#888;font-size:11px;">AI ต้องการ server — copy prompt นี้ไปวางใน Claude.ai แทนได้เลย:</div>
-      <div style="background:#f0f0ff;border-radius:6px;padding:8px;font-size:11px;color:#333;line-height:1.6;">${esc(prompt)}</div>
-      <button onclick="navigator.clipboard.writeText(${JSON.stringify(prompt)}).then(()=>toast('Copied!','success'))" style="margin-top:8px;padding:5px 10px;background:#6366f1;color:white;border:none;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">Copy prompt</button>
-    </div>`;
-  }
-  btn.disabled=false;
-}
-
-// Patch openDrawer to init AI section
-const _origOD_ai=openDrawer;
-openDrawer=function(id){
-  _origOD_ai(id);
-  const en=entries.find(e=>e.id===id);
-  if(en)initAiDrawer(en);
-};
-</script>
 
 <script>
 // Firebase sync status indicator
