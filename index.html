@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<style>:root{color-scheme:light;}</style>
 <title>CineLog</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -431,7 +433,35 @@ body.dark .card-rating{color:#f0f0f0;}
 }
 
 /* Mobile sidebar toggle button */
+
+/* Toolbar responsive */
+.tb-desktop{} /* show on desktop by default */
+.tb-mobile-only{display:none;}
+@media(max-width:768px){
+  .tb-desktop{display:none!important;}
+  .tb-mobile-only{display:flex!important;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0;}
+  .tb-mobile-only::-webkit-scrollbar{display:none;}
+}
+
 #btnMobileMenu{display:none;}
+
+/* Toolbar rows */
+.tb-row1{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0 2px;}
+.tb-row2{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:2px 0;}
+@media(min-width:769px){
+  /* Desktop: merge tb-row1 and tb-row2 into single row */
+  .main-sticky{padding:12px 24px 0;}
+  .tb-row1{padding:8px 0 0;flex-wrap:nowrap;}
+  .tb-row2{padding:0;}
+  .tb-row1,.tb-row2{display:inline-flex;}
+  /* Use a wrapper trick - override with a containing flex */
+  .main-sticky > .tb-row1 + .tb-row2{display:none;}
+  .tb-row1{flex-wrap:wrap;width:100%;}
+  /* Move tb-row2 items after search by making tb-row1 contain everything */
+  .sp-desktop{display:flex!important;}
+  .mob-only{display:none!important;}
+}
+
 @media(max-width:768px){
   #btnMobileMenu{
     display:flex;align-items:center;justify-content:center;
@@ -443,30 +473,46 @@ body.dark .card-rating{color:#f0f0f0;}
 
 /* ── Mobile UI ── */
 @media(max-width:768px){
-  /* Compact toolbar - 2 rows max */
-  .toolbar{flex-wrap:wrap;gap:4px;padding-bottom:4px;}
-  .search-box{flex:1;min-width:0;}
-  .btn-clear-filters{font-size:11px;padding:5px 8px;}
-  .sel{font-size:11px;padding:5px 7px;}
+  /* Force light mode on Android */
+  html,body{color-scheme:light!important;}
 
-  /* Status pills - horizontal scroll, compact */
-  .sp-group{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:4px;flex-wrap:nowrap;padding:4px 0;scrollbar-width:none;}
-  .sp-group::-webkit-scrollbar{display:none;}
-  .sp{font-size:10px;padding:4px 10px;white-space:nowrap;flex-shrink:0;}
-  .sp-group-sep{display:none;}
+  /* Topbar compact - keep Add Entry visible */
+  .topbar{padding:0 10px;height:50px;gap:6px;}
+  .topbar-sub{display:none;}
+  .topbar-tagline{display:none;}
+  .topbar-brand{flex:1;min-width:0;}
+  .topbar-title{font-size:18px;}
+  .btn.btn-light{font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0;}
 
-  /* View toggle - symbol only */
-  .vt-btn{width:36px!important;font-size:0;}
-  #btnViewGrid::before{content:'⊞';font-size:14px;}
-  #btnViewCal::before{content:'📅';font-size:13px;}
+  /* Layout */
+  .dashboard{grid-template-columns:1fr;}
+  .sidebar{display:none;position:fixed;inset:50px 0 0 0;z-index:300;height:calc(100vh - 50px);overflow-y:auto;}
+  .sidebar.mobile-open{display:block;}
+  .main{width:100%;}
+  .main-sticky{left:0!important;top:50px;}
+  .main-content{padding:10px 10px 80px;}
 
-  /* Poster 3 columns */
-  .entries-grid.poster-only{grid-template-columns:repeat(3,1fr);gap:6px;}
+  /* Toolbar 3 rows */
+  .tb-row1{display:flex;gap:6px;padding:6px 0 2px;}
+  .tb-row2{display:flex;gap:4px;padding:2px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .tb-row2::-webkit-scrollbar{display:none;}
+  .tb-row2 .sel{font-size:11px;padding:5px 6px;white-space:nowrap;flex-shrink:0;}
+
+  /* Status row */
+  .sp-desktop{display:none!important;}
+  .mob-only{display:block!important;}
+  #mobileStatusSel{flex:1;min-width:0;}
+
+  /* View toggle small */
+  .vt-btn{width:36px!important;padding:5px 0;}
+
+  /* Grid: 3 cols for poster, 2 for others */
+  .entries-grid.poster-only{grid-template-columns:repeat(3,1fr)!important;gap:5px;}
   .entries-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
 
-  /* Form slides up from bottom */
+  /* Form slide up from bottom */
   .form-overlay{align-items:flex-end;}
-  .form-panel{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;padding-top:env(safe-area-inset-top,16px);}
+  .form-panel{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;padding-bottom:env(safe-area-inset-bottom,20px);}
   .modal{align-items:flex-end;}
   .modal-box{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;}
 
@@ -474,32 +520,41 @@ body.dark .card-rating{color:#f0f0f0;}
   .detail-drawer{width:100vw;right:-100vw;}
   .detail-drawer.open{right:0;}
 
-  /* Main content */
-  .main-sticky{left:0;padding:8px 12px 0;top:50px;}
-  .main-content{padding:10px 12px 80px;}
-
-  /* Topbar */
-  .topbar{padding:0 12px;height:50px;}
-  .topbar-sub{display:none;}
-  .topbar-tagline{display:none;}
-
-  /* Layout */
-  .dashboard{grid-template-columns:1fr;}
-  .sidebar{display:none;position:fixed;inset:50px 0 0 0;z-index:300;height:calc(100vh - 50px);overflow-y:auto;background:#f4f4f4;}
-  .sidebar.mobile-open{display:block;}
-  body.dark .sidebar.mobile-open{background:#18181b;}
-  .main{width:100%;}
-
   /* Back to top */
   #btnBackTop{bottom:16px;right:16px;width:36px;height:36px;font-size:16px;}
+}
 
-  /* iOS safe area */
-  .form-panel{padding-bottom:env(safe-area-inset-bottom,16px);}
+
+/* Toolbar responsive */
+.tb-desktop{} /* show on desktop by default */
+.tb-mobile-only{display:none;}
+@media(max-width:768px){
+  .tb-desktop{display:none!important;}
+  .tb-mobile-only{display:flex!important;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0;}
+  .tb-mobile-only::-webkit-scrollbar{display:none;}
 }
 
 #btnMobileMenu{display:none;}
+
+/* Toolbar rows */
+.tb-row1{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0 2px;}
+.tb-row2{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:2px 0;}
+@media(min-width:769px){
+  /* Desktop: merge tb-row1 and tb-row2 into single row */
+  .main-sticky{padding:12px 24px 0;}
+  .tb-row1{padding:8px 0 0;flex-wrap:nowrap;}
+  .tb-row2{padding:0;}
+  .tb-row1,.tb-row2{display:inline-flex;}
+  /* Use a wrapper trick - override with a containing flex */
+  .main-sticky > .tb-row1 + .tb-row2{display:none;}
+  .tb-row1{flex-wrap:wrap;width:100%;}
+  /* Move tb-row2 items after search by making tb-row1 contain everything */
+  .sp-desktop{display:flex!important;}
+  .mob-only{display:none!important;}
+}
+
 @media(max-width:768px){
-  #btnMobileMenu{display:flex;align-items:center;justify-content:center;background:none;border:none;color:white;font-size:20px;cursor:pointer;padding:4px 8px;margin-right:4px;}
+  #btnMobileMenu{display:flex;align-items:center;justify-content:center;background:none;border:none;color:white;font-size:20px;cursor:pointer;padding:4px 8px;margin-right:2px;flex-shrink:0;}
 }
 
 .ssb-icon svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
@@ -959,7 +1014,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
     </div>
     <span id="fbStatus" title="Firebase sync" style="font-size:11px;color:rgba(255,255,255,0.4);padding:4px 6px;">⬤</span><button class="btn-dark-toggle" id="btnDarkMode" title="Toggle dark mode">🌙</button>
     <button class="btn-dark-toggle" id="btnYearReview" title="Year in Review" style="font-size:16px;">🎬</button>
-    <button class="btn btn-light" id="btnOpenForm">+ Add Entry</button>
+    <button class="btn btn-light" id="btnOpenForm" style="white-space:nowrap;">+ Add Entry</button>
   </div>
 </div>
 
@@ -1039,15 +1094,16 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
 
   <main class="main">
     <div class="main-sticky">
-      <div class="toolbar" style="align-items:center;">
+      <!-- Toolbar: 1 row on desktop, 2 rows on mobile -->
+      <div class="toolbar tb-row1">
         <div class="search-box"><input type="text" id="searchInput" placeholder="Search title or notes…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <button class="search-clear" id="btnSearchClear">×</button>
         <div class="autocomplete-dropdown" id="acDropdown"></div></div>
         <button class="btn-clear-filters" id="btnClearFilters" title="Reset all filters">✕ Clear</button>
-        <select class="sel" id="filterType"><option value="">All Types</option><option value="series">📺 Series</option><option value="movie">🎬 Movie</option></select>
-        <select class="sel" id="filterGenre"><option value="">All Genres</option></select>
-        <select class="sel" id="filterPlatform"><option value="">All Platforms</option></select>
-        <select class="sel" id="sortBy">
+        <select class="sel tb-desktop" id="filterType"><option value="">All Types</option><option value="series">📺 Series</option><option value="movie">🎬 Movie</option></select>
+        <select class="sel tb-desktop" id="filterGenre"><option value="">All Genres</option></select>
+        <select class="sel tb-desktop" id="filterPlatform"><option value="">All Platforms</option></select>
+        <select class="sel tb-desktop" id="sortBy">
           <option value="added">Recently Added</option>
           <option value="finish_date" selected>Recently Finished</option>
           <option value="release">Release Date (Newest)</option>
@@ -1059,22 +1115,46 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           <option value="collection">Collection</option>
         </select>
       </div>
+      <!-- Row 2 mobile only: filters -->
+      <div class="tb-row2 tb-mobile-only">
+        <select class="sel" id="filterTypeMob"><option value="">All Types</option><option value="series">📺 Series</option><option value="movie">🎬 Movie</option></select>
+        <select class="sel" id="filterGenreMob"><option value="">All Genres</option></select>
+        <select class="sel" id="filterPlatformMob"><option value="">All Platforms</option></select>
+        <select class="sel" id="sortByMob">
+          <option value="added">Recently Added</option>
+          <option value="finish_date" selected>Recently Finished</option>
+          <option value="release">Release (Newest)</option>
+          <option value="release_asc">Release (Oldest)</option>
+          <option value="title">Title A–Z</option>
+          <option value="rating">Highest Rated</option>
+          <option value="platform">Platform A–Z</option>
+        </select>
+      </div>
+      <!-- Row 3: Status + View -->
       <div class="status-pills" id="statusPills" style="display:flex;align-items:center;justify-content:space-between;">
-        <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
-        <button class="sp active" data-s="all">All</button>
-        <div class="sp-group-sep"></div>
-        <button class="sp" data-s="watched">✓ Watched</button>
-        <button class="sp" data-s="favorite">♡ Favorite</button>
-        <div class="sp-group-sep"></div>
-        <button class="sp" data-s="watching">▶ Watching</button>
-        <button class="sp" data-s="onhold"><svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor"><rect x="1.5" y="1.5" width="3.5" height="9" rx="1"/><rect x="7" y="1.5" width="3.5" height="9" rx="1"/></svg> On Hold</button>
-        <div class="sp-group-sep"></div>
-        <button class="sp" data-s="watchlist">◯ Watchlist</button>
+        <div class="sp-desktop" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+          <button class="sp active" data-s="all">All</button>
+          <div class="sp-group-sep"></div>
+          <button class="sp" data-s="watched">✓ Watched</button>
+          <button class="sp" data-s="favorite">♡ Favorite</button>
+          <div class="sp-group-sep"></div>
+          <button class="sp" data-s="watching">▶ Watching</button>
+          <button class="sp" data-s="onhold"><svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor"><rect x="1.5" y="1.5" width="3.5" height="9" rx="1"/><rect x="7" y="1.5" width="3.5" height="9" rx="1"/></svg> On Hold</button>
+          <div class="sp-group-sep"></div>
+          <button class="sp" data-s="watchlist">◯ Watchlist</button>
         </div>
+        <!-- Mobile: status dropdown -->
+        <select id="mobileStatusSel" class="sel mob-only" style="display:none;font-size:12px;">
+          <option value="all">All</option>
+          <option value="watched">✓ Watched</option>
+          <option value="favorite">♡ Favorite</option>
+          <option value="watching">▶ Watching</option>
+          <option value="onhold">⏸ On Hold</option>
+          <option value="watchlist">◯ Watchlist</option>
+        </select>
         <div class="view-toggle">
-
-          <button class="vt-btn active" id="btnViewGrid" style="width:70px">⊞ Grid</button>
-          <button class="vt-btn" id="btnViewCal" style="width:100px">📅 Calendar</button>
+          <button class="vt-btn active" id="btnViewGrid" style="width:36px">⊞</button>
+          <button class="vt-btn" id="btnViewCal" style="width:36px">📅</button>
         </div>
       </div>
     </div>
@@ -3587,7 +3667,17 @@ document.querySelectorAll('.sp').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.sp').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');statusFilter=btn.dataset.s;render();
+    // Sync mobile dropdown
+    const mob=document.getElementById('mobileStatusSel');
+    if(mob)mob.value=btn.dataset.s==='all'?'all':btn.dataset.s;
   });
+});
+// Mobile status dropdown
+const _mobSel=document.getElementById('mobileStatusSel');
+if(_mobSel)_mobSel.addEventListener('change',function(){
+  statusFilter=this.value==='all'?'all':this.value;
+  document.querySelectorAll('.sp').forEach(b=>b.classList.toggle('active',b.dataset.s===(statusFilter==='all'?'all':statusFilter)));
+  render();
 });
 let _modalMD=false;
 document.getElementById('editModal').addEventListener('mousedown',e=>{_modalMD=e.target.id==='editModal';});
@@ -4357,4 +4447,26 @@ body.dark .ai-result-box{background:#1a1a2e;border-color:#312e81;color:#e4e4e4;}
     }
   }, 8000);
 })();
+</script>
+
+<script>
+// Sync mobile filter selects with desktop
+['filterType','filterGenre','filterPlatform','sortBy'].forEach(id=>{
+  const desk=document.getElementById(id);
+  const mob=document.getElementById(id+'Mob');
+  if(!desk||!mob)return;
+  desk.addEventListener('change',()=>{mob.value=desk.value;render();});
+  mob.addEventListener('change',()=>{desk.value=mob.value;render();});
+});
+// Sync genre options to mobile dropdown
+const _origUGF=updateGenreFilter;
+updateGenreFilter=function(){
+  _origUGF();
+  const d=document.getElementById('filterGenre');
+  const m=document.getElementById('filterGenreMob');
+  if(d&&m){m.innerHTML=d.innerHTML;}
+  const dp=document.getElementById('filterPlatform');
+  const mp=document.getElementById('filterPlatformMob');
+  if(dp&&mp){mp.innerHTML=dp.innerHTML;}
+};
 </script>
