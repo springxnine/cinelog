@@ -444,6 +444,31 @@ body.dark .card-rating{color:#f0f0f0;}
 }
 
 #btnMobileMenu{display:none;}
+@media(max-width:768px){
+  /* Hide Firebase dot on mobile - save header space */
+  .fb-dot{display:none!important;}
+
+  /* Fix header overlap - reduce button sizes */
+  .topbar-title .topbar-logo-img{width:22px;}
+  .backup-btn{font-size:11px;padding:5px 8px;}
+  .topbar-brand{gap:6px;}
+
+  /* Row 2: Type+Genre+Platform on one line */
+  /* Row 3: Sort + Status + View on same line */
+  .tb-row2{display:flex!important;gap:4px;overflow-x:auto;padding:2px 0;scrollbar-width:none;flex-wrap:nowrap;}
+  .tb-row2::-webkit-scrollbar{display:none;}
+
+  /* Status + view on same row as sort */
+  .tb-row3{display:flex;align-items:center;gap:4px;padding:2px 0;}
+  .tb-row3 #mobileStatusSel{flex:1;}
+  .sp-desktop{display:none!important;}
+  .mob-only{display:flex!important;}
+  #statusPills > .sp-desktop{display:none!important;}
+
+  /* Status pills row - now hidden, using dropdown in tb-row3 */
+  #statusPills{padding:2px 0;}
+}
+
 
 /* Toolbar rows */
 .tb-row1{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0 2px;}
@@ -535,6 +560,31 @@ body.dark .card-rating{color:#f0f0f0;}
 }
 
 #btnMobileMenu{display:none;}
+@media(max-width:768px){
+  /* Hide Firebase dot on mobile - save header space */
+  .fb-dot{display:none!important;}
+
+  /* Fix header overlap - reduce button sizes */
+  .topbar-title .topbar-logo-img{width:22px;}
+  .backup-btn{font-size:11px;padding:5px 8px;}
+  .topbar-brand{gap:6px;}
+
+  /* Row 2: Type+Genre+Platform on one line */
+  /* Row 3: Sort + Status + View on same line */
+  .tb-row2{display:flex!important;gap:4px;overflow-x:auto;padding:2px 0;scrollbar-width:none;flex-wrap:nowrap;}
+  .tb-row2::-webkit-scrollbar{display:none;}
+
+  /* Status + view on same row as sort */
+  .tb-row3{display:flex;align-items:center;gap:4px;padding:2px 0;}
+  .tb-row3 #mobileStatusSel{flex:1;}
+  .sp-desktop{display:none!important;}
+  .mob-only{display:flex!important;}
+  #statusPills > .sp-desktop{display:none!important;}
+
+  /* Status pills row - now hidden, using dropdown in tb-row3 */
+  #statusPills{padding:2px 0;}
+}
+
 
 /* Toolbar rows */
 .tb-row1{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0 2px;}
@@ -1012,7 +1062,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
         <div class="backup-menu-item" id="bmiExportCsv"><span class="bmi-icon">📊</span><div class="bmi-info"><div class="bmi-title">Export CSV</div><div class="bmi-sub">Open in Excel or Sheets</div></div></div>
       </div>
     </div>
-    <span id="fbStatus" title="Firebase sync" style="font-size:11px;color:rgba(255,255,255,0.4);padding:4px 6px;">⬤</span><button class="btn-dark-toggle" id="btnDarkMode" title="Toggle dark mode">🌙</button>
+    <span id="fbStatus" title="Firebase sync" style="font-size:11px;color:rgba(255,255,255,0.4);padding:4px 6px;" class="fb-dot">⬤</span><button class="btn-dark-toggle" id="btnDarkMode" title="Toggle dark mode">🌙</button>
     <button class="btn-dark-toggle" id="btnYearReview" title="Year in Review" style="font-size:16px;">🎬</button>
     <button class="btn btn-light" id="btnOpenForm" style="white-space:nowrap;">+ Add Entry</button>
   </div>
@@ -1130,7 +1180,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           <option value="platform">Platform A–Z</option>
         </select>
       </div>
-      <!-- Row 3: Status + View -->
+      <!-- Desktop status row -->
       <div class="status-pills" id="statusPills" style="display:flex;align-items:center;justify-content:space-between;">
         <div class="sp-desktop" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
           <button class="sp active" data-s="all">All</button>
@@ -1143,8 +1193,14 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           <div class="sp-group-sep"></div>
           <button class="sp" data-s="watchlist">◯ Watchlist</button>
         </div>
-        <!-- Mobile: status dropdown -->
-        <select id="mobileStatusSel" class="sel mob-only" style="display:none;font-size:12px;">
+        <div class="view-toggle tb-desktop">
+          <button class="vt-btn active" id="btnViewGrid" style="width:36px">⊞</button>
+          <button class="vt-btn" id="btnViewCal" style="width:36px">📅</button>
+        </div>
+      </div>
+      <!-- Mobile row 3: Sort + Status + View -->
+      <div class="tb-row3 tb-mobile-only" style="display:none;">
+        <select id="mobileStatusSel" class="sel" style="font-size:12px;flex:1;">
           <option value="all">All</option>
           <option value="watched">✓ Watched</option>
           <option value="favorite">♡ Favorite</option>
@@ -1152,9 +1208,9 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           <option value="onhold">⏸ On Hold</option>
           <option value="watchlist">◯ Watchlist</option>
         </select>
-        <div class="view-toggle">
-          <button class="vt-btn active" id="btnViewGrid" style="width:36px">⊞</button>
-          <button class="vt-btn" id="btnViewCal" style="width:36px">📅</button>
+        <div class="view-toggle" style="flex-shrink:0;">
+          <button class="vt-btn active" id="btnViewGridMob" style="width:36px" onclick="document.getElementById('btnViewGrid').click()">⊞</button>
+          <button class="vt-btn" id="btnViewCalMob" style="width:36px" onclick="document.getElementById('btnViewCal').click()">📅</button>
         </div>
       </div>
     </div>
@@ -2660,7 +2716,8 @@ function renderCalendar(){
   },0);
   const _sumEl=document.getElementById('calSummary');
   if(_sumEl){
-    if(_mAll.length){
+    const _hasEpActivity=_eps>0||_aDays>0;
+    if(_mAll.length||_hasEpActivity){
       let _p=[_aDays+' watch day'+(_aDays!==1?'s':'')];
       if(_mov>0)_p.push('🎬 '+_mov);
       if(_eps>0)_p.push('📺 '+_eps+' eps');
@@ -2792,11 +2849,12 @@ function clearAllFilters(){
   document.getElementById('filterGenre').value='';
   document.getElementById('filterPlatform').value='';
   document.getElementById('sortBy').value='finish_date';
+  // Reset mobile selects too
+  ['filterTypeMob','filterGenreMob','filterPlatformMob'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const sm=document.getElementById('sortByMob');if(sm)sm.value='finish_date';
+  const ms=document.getElementById('mobileStatusSel');if(ms)ms.value='all';
   document.getElementById('btnSearchClear').classList.remove('visible');
-  // Reset status pills
-  document.querySelectorAll('.sp').forEach(b=>{
-    b.classList.toggle('active',b.dataset.s==='all');
-  });
+  document.querySelectorAll('.sp').forEach(b=>b.classList.toggle('active',b.dataset.s==='all'));
   statusFilter='all';
   render();updateClearBtn();
 }
@@ -4462,11 +4520,12 @@ body.dark .ai-result-box{background:#1a1a2e;border-color:#312e81;color:#e4e4e4;}
 const _origUGF=updateGenreFilter;
 updateGenreFilter=function(){
   _origUGF();
+  // Sync mobile dropdowns
   const d=document.getElementById('filterGenre');
   const m=document.getElementById('filterGenreMob');
-  if(d&&m){m.innerHTML=d.innerHTML;}
+  if(d&&m){const cv=m.value;m.innerHTML=d.innerHTML;m.value=cv;}
   const dp=document.getElementById('filterPlatform');
   const mp=document.getElementById('filterPlatformMob');
-  if(dp&&mp){mp.innerHTML=dp.innerHTML;}
+  if(dp&&mp){const cv=mp.value;mp.innerHTML=dp.innerHTML;mp.value=cv;}
 };
 </script>
