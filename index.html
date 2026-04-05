@@ -444,6 +444,8 @@ body.dark .card-rating{color:#f0f0f0;}
 }
 
 #btnMobileMenu{display:none;}
+
+
 @media(max-width:768px){
   /* Hide Firebase dot on mobile - save header space */
   .fb-dot{display:none!important;}
@@ -496,18 +498,42 @@ body.dark .card-rating{color:#f0f0f0;}
 }
 
 
-/* ── Mobile UI ── */
+/* ── Mobile / Desktop Toolbar ── */
+/* Desktop defaults */
+.tb-desktop{display:inline-flex;} /* filters show in row1 on desktop */
+.tb-mobile-only{display:none;}    /* mobile-only rows hidden on desktop */
+.tb-row1{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0 4px;}
+.tb-row2{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:2px 0;}
+.sp-desktop{display:flex!important;}
+.mob-only{display:none!important;}
+#btnMobileMenu{display:none;}
+
+@media(min-width:769px){
+  .main-sticky{padding:12px 24px 0;}
+  .tb-row1 .search-box{flex:1;}
+}
+
 @media(max-width:768px){
-  /* Force light mode on Android */
+  /* Force light on Android */
   html,body{color-scheme:light!important;}
 
-  /* Topbar compact - keep Add Entry visible */
-  .topbar{padding:0 10px;height:50px;gap:6px;}
-  .topbar-sub{display:none;}
-  .topbar-tagline{display:none;}
-  .topbar-brand{flex:1;min-width:0;}
-  .topbar-title{font-size:18px;}
-  .btn.btn-light{font-size:11px;padding:6px 10px;white-space:nowrap;flex-shrink:0;}
+  /* Topbar */
+  .topbar{padding:0 6px;height:50px;gap:4px;flex-wrap:nowrap;}
+  .topbar-brand{flex:1;min-width:0;overflow:hidden;}
+  .topbar-sub,.topbar-tagline{display:none;}
+  .topbar-title{font-size:16px;white-space:nowrap;}
+  .btn.btn-light{font-size:11px;padding:5px 9px;white-space:nowrap;flex-shrink:0;}
+
+  /* Backup icon only */
+  .backup-txt{display:none!important;}
+  .backup-btn{padding:6px 8px!important;font-size:18px!important;border:none!important;background:rgba(255,255,255,0.1)!important;}
+  .backup-btn::before{content:"💾";}
+
+  /* Firebase dot: hide */
+  .fb-dot{display:none!important;}
+
+  /* Mobile menu btn */
+  #btnMobileMenu{display:flex;align-items:center;justify-content:center;background:none;border:none;color:white;font-size:20px;cursor:pointer;padding:4px 6px;flex-shrink:0;}
 
   /* Layout */
   .dashboard{grid-template-columns:1fr;}
@@ -517,94 +543,41 @@ body.dark .card-rating{color:#f0f0f0;}
   .main-sticky{left:0!important;top:50px;}
   .main-content{padding:10px 10px 80px;}
 
-  /* Toolbar 3 rows */
-  .tb-row1{display:flex;gap:6px;padding:6px 0 2px;}
-  .tb-row2{display:flex;gap:4px;padding:2px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-  .tb-row2::-webkit-scrollbar{display:none;}
+  /* Toolbar rows */
+  .tb-row1{flex-wrap:nowrap;padding:6px 0 2px;}
+  .tb-row1 .search-box{flex:1;min-width:0;}
+  .tb-desktop{display:none!important;}  /* hide desktop filters from row1 */
+  .tb-mobile-only{display:flex!important;}
+
+  /* Row 2: Type+Genre+Platform scrollable */
+  .tb-row2.tb-mobile-only{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:4px;padding:2px 0;flex-wrap:nowrap;}
+  .tb-row2.tb-mobile-only::-webkit-scrollbar{display:none;}
   .tb-row2 .sel{font-size:11px;padding:5px 6px;white-space:nowrap;flex-shrink:0;}
 
-  /* Status row */
+  /* Row 3: Sort + Status + View all on same line */
+  .tb-row3.tb-mobile-only{gap:4px;padding:2px 0;align-items:center;}
+  #sortByMob{flex:1.3;font-size:11px;padding:5px 4px;min-width:0;}
+  #mobileStatusSel{flex:1;font-size:11px;padding:5px 4px;min-width:0;}
+
+  /* View buttons equal size */
+  .tb-row3 .vt-btn{width:34px!important;height:32px!important;font-size:16px!important;padding:0!important;display:flex;align-items:center;justify-content:center;}
+
+  /* Hide desktop status pills */
   .sp-desktop{display:none!important;}
-  .mob-only{display:block!important;}
-  #mobileStatusSel{flex:1;min-width:0;}
+  #statusPills{padding:0;min-height:0;}
 
-  /* View toggle small */
-  .vt-btn{width:36px!important;padding:5px 0;}
-
-  /* Grid: 3 cols for poster, 2 for others */
+  /* Grid */
   .entries-grid.poster-only{grid-template-columns:repeat(3,1fr)!important;gap:5px;}
   .entries-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
 
-  /* Form slide up from bottom */
+  /* Forms slide up */
   .form-overlay{align-items:flex-end;}
   .form-panel{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;padding-bottom:env(safe-area-inset-bottom,20px);}
   .modal{align-items:flex-end;}
   .modal-box{width:100vw;min-width:unset;border-radius:16px 16px 0 0;max-height:92vh;margin:0;}
-
-  /* Drawer full width */
   .detail-drawer{width:100vw;right:-100vw;}
   .detail-drawer.open{right:0;}
-
-  /* Back to top */
   #btnBackTop{bottom:16px;right:16px;width:36px;height:36px;font-size:16px;}
-}
-
-
-/* Toolbar responsive */
-.tb-desktop{} /* show on desktop by default */
-.tb-mobile-only{display:none;}
-@media(max-width:768px){
-  .tb-desktop{display:none!important;}
-  .tb-mobile-only{display:flex!important;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0;}
-  .tb-mobile-only::-webkit-scrollbar{display:none;}
-}
-
-#btnMobileMenu{display:none;}
-@media(max-width:768px){
-  /* Hide Firebase dot on mobile - save header space */
-  .fb-dot{display:none!important;}
-
-  /* Fix header overlap - reduce button sizes */
-  .topbar-title .topbar-logo-img{width:22px;}
-  .backup-btn{font-size:11px;padding:5px 8px;}
-  .topbar-brand{gap:6px;}
-
-  /* Row 2: Type+Genre+Platform on one line */
-  /* Row 3: Sort + Status + View on same line */
-  .tb-row2{display:flex!important;gap:4px;overflow-x:auto;padding:2px 0;scrollbar-width:none;flex-wrap:nowrap;}
-  .tb-row2::-webkit-scrollbar{display:none;}
-
-  /* Status + view on same row as sort */
-  .tb-row3{display:flex;align-items:center;gap:4px;padding:2px 0;}
-  .tb-row3 #mobileStatusSel{flex:1;}
-  .sp-desktop{display:none!important;}
-  .mob-only{display:flex!important;}
-  #statusPills > .sp-desktop{display:none!important;}
-
-  /* Status pills row - now hidden, using dropdown in tb-row3 */
-  #statusPills{padding:2px 0;}
-}
-
-
-/* Toolbar rows */
-.tb-row1{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 0 2px;}
-.tb-row2{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:2px 0;}
-@media(min-width:769px){
-  /* Desktop: merge tb-row1 and tb-row2 into single row */
-  .main-sticky{padding:12px 24px 0;}
-  .tb-row1{padding:8px 0 0;flex-wrap:nowrap;}
-  .tb-row2{padding:0;}
-  .tb-row1,.tb-row2{display:inline-flex;}
-  /* Use a wrapper trick - override with a containing flex */
-  .main-sticky > .tb-row1 + .tb-row2{display:none;}
-  .tb-row1{flex-wrap:wrap;width:100%;}
-  /* Move tb-row2 items after search by making tb-row1 contain everything */
-  .sp-desktop{display:flex!important;}
-  .mob-only{display:none!important;}
-}
-
-@media(max-width:768px){
-  #btnMobileMenu{display:flex;align-items:center;justify-content:center;background:none;border:none;color:white;font-size:20px;cursor:pointer;padding:4px 8px;margin-right:2px;flex-shrink:0;}
 }
 
 .ssb-icon svg{width:13px;height:13px;fill:currentColor;flex-shrink:0;}
@@ -793,6 +766,12 @@ body.dark .cal-arrow:hover{background:#2a2a2e;}
 /* Export/Import menu */
 .backup-btn{background:none;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);padding:7px 11px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;gap:5px;}
 .backup-btn:hover{background:rgba(255,255,255,0.1);color:white;}
+@media(max-width:768px){
+  .backup-txt{display:none;}
+  .backup-btn{padding:6px 8px;font-size:18px;border:none;background:rgba(255,255,255,0.1);}
+  .backup-btn::before{content:"💾";}
+}
+
 .backup-menu{position:absolute;top:calc(100% + 8px);right:0;background:white;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.16);min-width:200px;overflow:hidden;display:none;z-index:500;}
 .backup-menu.open{display:block;}
 .backup-menu-item{padding:12px 16px;font-size:13px;color:#333;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background 0.12s;border-bottom:1px solid #f5f5f5;}
@@ -1055,7 +1034,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
   </div>
   <div style="display:flex;gap:8px;align-items:center;">
     <div class="backup-wrap">
-      <button class="backup-btn" id="btnBackup">💾 Backup</button>
+      <button class="backup-btn" id="btnBackup"><span class="backup-txt">💾 Backup</span></button>
       <div class="backup-menu" id="backupMenu">
         <div class="backup-menu-item" id="bmiExport"><span class="bmi-icon">⬇️</span><div class="bmi-info"><div class="bmi-title">Export JSON</div><div class="bmi-sub">Download all data as backup</div></div></div>
         <div class="backup-menu-item" id="bmiImport"><span class="bmi-icon">⬆️</span><div class="bmi-info"><div class="bmi-title">Import JSON</div><div class="bmi-sub">Restore from backup file</div></div></div>
@@ -1165,20 +1144,11 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           <option value="collection">Collection</option>
         </select>
       </div>
-      <!-- Row 2 mobile only: filters -->
+      <!-- Row 2 mobile: Type + Genre + Platform -->
       <div class="tb-row2 tb-mobile-only">
         <select class="sel" id="filterTypeMob"><option value="">All Types</option><option value="series">📺 Series</option><option value="movie">🎬 Movie</option></select>
         <select class="sel" id="filterGenreMob"><option value="">All Genres</option></select>
         <select class="sel" id="filterPlatformMob"><option value="">All Platforms</option></select>
-        <select class="sel" id="sortByMob">
-          <option value="added">Recently Added</option>
-          <option value="finish_date" selected>Recently Finished</option>
-          <option value="release">Release (Newest)</option>
-          <option value="release_asc">Release (Oldest)</option>
-          <option value="title">Title A–Z</option>
-          <option value="rating">Highest Rated</option>
-          <option value="platform">Platform A–Z</option>
-        </select>
       </div>
       <!-- Desktop status row -->
       <div class="status-pills" id="statusPills" style="display:flex;align-items:center;justify-content:space-between;">
@@ -1200,7 +1170,16 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
       </div>
       <!-- Mobile row 3: Sort + Status + View -->
       <div class="tb-row3 tb-mobile-only" style="display:none;">
-        <select id="mobileStatusSel" class="sel" style="font-size:12px;flex:1;">
+        <select class="sel" id="sortByMob" style="font-size:11px;flex:1;min-width:0;">
+          <option value="added">Recently Added</option>
+          <option value="finish_date" selected>Recently Finished</option>
+          <option value="release">Release ↓</option>
+          <option value="release_asc">Release ↑</option>
+          <option value="title">Title A–Z</option>
+          <option value="rating">Highest Rated</option>
+          <option value="platform">Platform</option>
+        </select>
+        <select id="mobileStatusSel" class="sel" style="font-size:11px;flex:1;min-width:0;">
           <option value="all">All</option>
           <option value="watched">✓ Watched</option>
           <option value="favorite">♡ Favorite</option>
@@ -1209,8 +1188,8 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           <option value="watchlist">◯ Watchlist</option>
         </select>
         <div class="view-toggle" style="flex-shrink:0;">
-          <button class="vt-btn active" id="btnViewGridMob" style="width:36px" onclick="document.getElementById('btnViewGrid').click()">⊞</button>
-          <button class="vt-btn" id="btnViewCalMob" style="width:36px" onclick="document.getElementById('btnViewCal').click()">📅</button>
+          <button class="vt-btn active" id="btnViewGridMob" style="width:38px;font-size:16px;" onclick="document.getElementById('btnViewGrid').click()">⊞</button>
+          <button class="vt-btn" id="btnViewCalMob" style="width:38px;font-size:16px;" onclick="document.getElementById('btnViewCal').click()">📅</button>
         </div>
       </div>
     </div>
@@ -2692,8 +2671,9 @@ function setView(v){
   currentView=v;
   document.getElementById('entriesGrid').style.display=v==='grid'?'':'none';
   document.getElementById('calendarView').style.display=v==='cal'?'block':'none';
-  document.getElementById('btnViewGrid').classList.toggle('active',v==='grid');
-  document.getElementById('btnViewCal').classList.toggle('active',v==='cal');
+  // Sync all view buttons (desktop + mobile)
+  ['btnViewGrid','btnViewGridMob'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',v==='grid');});
+  ['btnViewCal','btnViewCalMob'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('active',v==='cal');});
   if(v==='cal')renderCalendar();
 }
 
@@ -4517,15 +4497,14 @@ body.dark .ai-result-box{background:#1a1a2e;border-color:#312e81;color:#e4e4e4;}
   mob.addEventListener('change',()=>{desk.value=mob.value;render();});
 });
 // Sync genre options to mobile dropdown
+function syncMobileDropdowns(){
+  const d=document.getElementById('filterGenre'),m=document.getElementById('filterGenreMob');
+  if(d&&m){const cv=m.value;m.innerHTML=d.innerHTML;m.value=cv||'';}
+  const dp=document.getElementById('filterPlatform'),mp=document.getElementById('filterPlatformMob');
+  if(dp&&mp){const cv=mp.value;mp.innerHTML=dp.innerHTML;mp.value=cv||'';}
+}
 const _origUGF=updateGenreFilter;
-updateGenreFilter=function(){
-  _origUGF();
-  // Sync mobile dropdowns
-  const d=document.getElementById('filterGenre');
-  const m=document.getElementById('filterGenreMob');
-  if(d&&m){const cv=m.value;m.innerHTML=d.innerHTML;m.value=cv;}
-  const dp=document.getElementById('filterPlatform');
-  const mp=document.getElementById('filterPlatformMob');
-  if(dp&&mp){const cv=mp.value;mp.innerHTML=dp.innerHTML;mp.value=cv;}
-};
+updateGenreFilter=function(){_origUGF();syncMobileDropdowns();};
+// Also sync on load
+window.addEventListener('load',function(){setTimeout(syncMobileDropdowns,200);});
 </script>
