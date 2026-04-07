@@ -254,6 +254,34 @@ body.dark .card-rating{color:#f0f0f0;}
 .gchip{padding:5px 11px;border-radius:16px;border:1.5px solid #e0e0e0;background:white;color:#888;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.15s;font-family:inherit;user-select:none;}
 .gchip:hover{border-color:#888;color:#444;}
 .gchip.selected{background:#1e1e1e;color:white;border-color:#1e1e1e;}
+/* Trope chips */
+
+/* Trope hybrid UI */
+.trope-search-wrap{position:relative;margin-bottom:6px;}
+.trope-search-input{width:100%;padding:7px 10px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;}
+.trope-search-input:focus{border-color:#6d28d9;}
+.trope-suggest{position:absolute;top:calc(100% + 4px);left:0;right:0;background:white;border:1.5px solid #e0e0e0;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.1);z-index:50;overflow:hidden;}
+.trope-suggest-item{padding:8px 12px;font-size:13px;cursor:pointer;color:#333;}
+.trope-suggest-item:hover{background:#f5f3ff;color:#5b21b6;}
+.trope-browse-btn{background:none;border:1.5px solid #e0e0e0;color:#888;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin:4px 0;transition:all 0.15s;}
+.trope-browse-btn:hover{border-color:#6d28d9;color:#6d28d9;}
+.trope-browse-panel{margin-top:6px;}
+.trope-cat-sec{margin-bottom:10px;}
+.trope-cat-lbl{font-size:10px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
+body.dark .trope-search-input{background:#111114;border-color:#333;color:#e4e4e4;}
+body.dark .trope-suggest{background:#1a1a1f;border-color:#333;}
+body.dark .trope-suggest-item{color:#e4e4e4;}
+body.dark .trope-suggest-item:hover{background:#2e1065;}
+body.dark .trope-browse-btn{border-color:#333;color:#666;}
+body.dark .trope-cat-lbl{color:#555;}
+
+
+.elem-chip{background:#e0f2fe!important;color:#0369a1!important;border-color:#7dd3fc!important;}
+body.dark .elem-chip{background:#0c4a6e!important;color:#7dd3fc!important;border-color:#0369a1!important;}
+
+.trope-chip{background:#ede9fe!important;color:#5b21b6!important;border-color:#c4b5fd!important;}
+body.dark .trope-chip{background:#2e1065!important;color:#c4b5fd!important;border-color:#4c1d95!important;}
+
 .calc-result{padding:9px 11px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;font-size:13px;color:#166534;font-weight:600;}
 .poster-input-area{border:1.5px dashed #e0e0e0;border-radius:8px;padding:12px;text-align:center;cursor:pointer;transition:border-color 0.2s;margin-bottom:6px;position:relative;background:#fafafa;}
 .poster-input-area:hover{border-color:#aaa;}
@@ -540,22 +568,22 @@ body.dark .card-rating{color:#f0f0f0;}
   .sidebar{display:none;position:fixed;inset:50px 0 0 0;z-index:300;height:calc(100vh - 50px);overflow-y:auto;}
   .sidebar.mobile-open{display:block;}
   .main{width:100%;}
-  .main-sticky{left:0!important;top:50px;}
+  .main-sticky{left:0!important;top:50px;padding:4px 10px 0!important;}
   .main-content{padding:10px 10px 80px;}
 
   /* Toolbar rows */
-  .tb-row1{flex-wrap:nowrap;padding:6px 0 2px;}
+  .tb-row1{flex-wrap:nowrap;padding:4px 0 1px;}
   .tb-row1 .search-box{flex:1;min-width:0;}
   .tb-desktop{display:none!important;}  /* hide desktop filters from row1 */
   .tb-mobile-only{display:flex!important;}
 
   /* Row 2: Type+Genre+Platform scrollable */
-  .tb-row2.tb-mobile-only{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:4px;padding:2px 0;flex-wrap:nowrap;}
+  .tb-row2.tb-mobile-only{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:4px;padding:1px 0;flex-wrap:nowrap;}
   .tb-row2.tb-mobile-only::-webkit-scrollbar{display:none;}
   .tb-row2 .sel{font-size:11px;padding:5px 6px;white-space:nowrap;flex-shrink:0;}
 
   /* Row 3: Sort + Status + View all on same line */
-  .tb-row3.tb-mobile-only{gap:4px;padding:2px 0;align-items:center;}
+  .tb-row3.tb-mobile-only{gap:4px;padding:1px 0;align-items:center;}
   #sortByMob{flex:1.3;font-size:11px;padding:5px 4px;min-width:0;}
   #mobileStatusSel{flex:1;font-size:11px;padding:5px 4px;min-width:0;}
 
@@ -564,7 +592,7 @@ body.dark .card-rating{color:#f0f0f0;}
 
   /* Hide desktop status pills */
   .sp-desktop{display:none!important;}
-  #statusPills{padding:0;min-height:0;}
+  #statusPills{padding:0;min-height:0;margin:0;}
 
   /* Grid */
   .entries-grid.poster-only{grid-template-columns:repeat(3,1fr)!important;gap:5px;}
@@ -1317,6 +1345,30 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           </div>
           <div class="form-hint">Click to select · or type custom genre</div>
         </div>
+        <div class="fg">
+          <label>Tropes <span style="font-weight:400;color:#bbb;font-size:10px;">optional</span></label>
+          <div class="trope-search-wrap">
+            <input type="text" id="tropeSearchAdd" placeholder="Search tropes… e.g. Slow Burn" autocomplete="off" class="trope-search-input">
+            <div class="trope-suggest" id="tropeSuggestAdd" style="display:none;"></div>
+          </div>
+          <div class="genre-chips" id="tropeSelectedAdd" style="min-height:0;"></div>
+          <input type="hidden" id="tropeHiddenAdd">
+          <button type="button" class="trope-browse-btn" id="tropeBrowseAdd">Browse all tropes ▾</button>
+          <div class="trope-browse-panel" id="tropePanelAdd" style="display:none;"></div>
+          <div class="form-hint">Search or browse · click to add</div>
+        </div>
+        <div class="fg">
+          <label>Elements <span style="font-weight:400;color:#bbb;font-size:10px;">optional · setting & vibe</span></label>
+          <div class="trope-search-wrap">
+            <input type="text" id="elemSearchAdd" placeholder="Search elements… e.g. High School" autocomplete="off" class="trope-search-input">
+            <div class="trope-suggest" id="elemSuggestAdd" style="display:none;"></div>
+          </div>
+          <div class="genre-chips" id="elemSelectedAdd" style="min-height:0;"></div>
+          <input type="hidden" id="elemHiddenAdd">
+          <button type="button" class="trope-browse-btn" id="elemBrowseAdd">Browse all elements ▾</button>
+          <div class="trope-browse-panel" id="elemPanelAdd" style="display:none;"></div>
+          <div class="form-hint">Search or browse · click to add</div>
+        </div>
         <div class="fg"><label>Collection / Franchise <span style="font-weight:400;color:#bbb;font-size:10px;">(e.g. Culpa Series)</span></label><input type="text" id="collectionAdd" placeholder="e.g. Culpa Series, MCU, Fast & Furious…" autocomplete="off"></div>
         <div class="fg-row">
           <div class="fg"><label>Language</label>
@@ -1448,6 +1500,30 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           </div>
           <div class="form-hint">Click to select / deselect</div>
         </div>
+        <div class="fg">
+          <label>Tropes <span style="font-weight:400;color:#bbb;font-size:10px;">optional</span></label>
+          <div class="trope-search-wrap">
+            <input type="text" id="tropeSearchEdit" placeholder="Search tropes… e.g. Slow Burn" autocomplete="off" class="trope-search-input">
+            <div class="trope-suggest" id="tropeSuggestEdit" style="display:none;"></div>
+          </div>
+          <div class="genre-chips" id="tropeSelectedEdit" style="min-height:0;"></div>
+          <input type="hidden" id="tropeHiddenEdit">
+          <button type="button" class="trope-browse-btn" id="tropeBrowseEdit">Browse all tropes ▾</button>
+          <div class="trope-browse-panel" id="tropePanelEdit" style="display:none;"></div>
+          <div class="form-hint">Search or browse · click to add</div>
+        </div>
+        <div class="fg">
+          <label>Elements <span style="font-weight:400;color:#bbb;font-size:10px;">optional · setting & vibe</span></label>
+          <div class="trope-search-wrap">
+            <input type="text" id="elemSearchEdit" placeholder="Search elements… e.g. High School" autocomplete="off" class="trope-search-input">
+            <div class="trope-suggest" id="elemSuggestEdit" style="display:none;"></div>
+          </div>
+          <div class="genre-chips" id="elemSelectedEdit" style="min-height:0;"></div>
+          <input type="hidden" id="elemHiddenEdit">
+          <button type="button" class="trope-browse-btn" id="elemBrowseEdit">Browse all elements ▾</button>
+          <div class="trope-browse-panel" id="elemPanelEdit" style="display:none;"></div>
+          <div class="form-hint">Search or browse · click to add</div>
+        </div>
         <div class="fg"><label>Collection / Franchise <span style="font-weight:400;color:#bbb;font-size:10px;">(optional)</span></label><input type="text" id="collectionEdit" placeholder="e.g. Culpa Series, MCU, Fast & Furious…" autocomplete="off"></div>
         <div class="fg-row">
           <div class="fg"><label>Language</label>
@@ -1512,6 +1588,14 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
     <div class="drawer-section" id="drawerGenreSection">
       <div class="drawer-section-title">Genre</div>
       <div class="drawer-chips" id="drawerGenres"></div>
+    </div>
+    <div class="drawer-section" id="drawerTropeSection" style="display:none">
+      <div class="drawer-section-title">Tropes</div>
+      <div class="drawer-chips" id="drawerTropes"></div>
+    </div>
+    <div class="drawer-section" id="drawerElemSection" style="display:none">
+      <div class="drawer-section-title">Elements</div>
+      <div class="drawer-chips" id="drawerElems"></div>
     </div>
     <div class="drawer-section" id="drawerMetaSection">
       <div class="drawer-section-title">Details</div>
@@ -1624,7 +1708,22 @@ window._fbReady = true;
 console.log('Firebase ready ✓');
 </script>
 <script>
-const GENRES=['Action','Adventure','Animation','Comedy','Crime','Drama','Fantasy','Horror','Music','Musical','Mystery','Romance','Sci-Fi','Soap','Superhero','Thriller','Slice of Life','Teen Romance','Teen Drama','Coming-of-Age','Family','Young Adult','LGBTQ+','K-Drama'];
+const GENRES=['Action','Adventure','Animation','Comedy','Crime','Drama','Family','Fantasy','Horror','K-Drama','LGBTQ+','Musical','Mystery','Romance','Sci-Fi','Superhero','Thriller','Young Adult'];
+const TROPES_BY_CAT={
+  'Romance':['Enemies to Lovers','Slow Burn','Fake Dating','Second Chance','Love Triangle','Forbidden Love','Forced Proximity','Childhood Friends','Opposites Attract','One Bed','Power Couple','Unrequited Love','Friends to Lovers','Age Gap','Grumpy x Sunshine','Workplace Romance','Marriage of Convenience','Soulmates','Secret Royalty'],
+  'Family & Found Family':['Found Family','Mentor & Student','Sibling Rivalry','Parental Issues'],
+  'Identity & Growth':['Coming of Age','Redemption Arc','Hidden Identity','Fish Out of Water','Underdog','Self-Discovery','Imposter Syndrome'],
+  'Plot & Conflict':['Chosen One','Revenge Plot','Rivals','Political Intrigue','Survival','Heist','Time Loop','Road Trip','Unreliable Narrator','Mystery Box','Whodunit'],
+  'Character Dynamics':['Amnesia','Odd Couple','Bromance','Anti-Hero','I Can Fix Him','Class Disparity','Morally Grey'],
+};
+const TROPES=Object.values(TROPES_BY_CAT).flat();
+const ELEMENTS_BY_CAT={
+  'Life & Setting':['High School','College','Workplace','Small Town','High Society'],
+  'Lifestyle & Culture':['Music','Dance','Fashion','Sports','Celebrity'],
+  'Situation & World':['Supernatural','Time Travel','Survival','Historical','Mafia'],
+  'Core Themes':['Self-discovery','Coming of Age','Friendship','Family','Self-love'],
+};
+const ELEMENTS=Object.values(ELEMENTS_BY_CAT).flat();
 
 // Status config: icon, label, pastel color
 const ST={
@@ -2184,6 +2283,152 @@ function updateStatusVisibility(pfx){
   const ratingFg=document.getElementById(pfx==='Add'?'addRatingFg':'editRatingFg');
   if(ratingFg)ratingFg.style.display=showRating?'':'none';
 }
+
+function buildTropeChips(selId, hidId, selected){
+  const selWrap=document.getElementById(selId);
+  if(!selWrap)return;
+  // Render selected chips
+  function renderSelected(tropes){
+    selWrap.innerHTML='';
+    tropes.forEach(t=>{
+      const b=document.createElement('button');
+      b.type='button';b.className='gchip selected';b.textContent=t+' ×';
+      b.addEventListener('click',()=>{
+        const cur=getSelectedTropes(hidId);
+        setSelectedTropes(hidId,selId,cur.filter(x=>x!==t));
+      });
+      selWrap.appendChild(b);
+    });
+  }
+  function getSelectedTropes(hid){
+    const v=document.getElementById(hid)?.value||'';
+    return v?v.split(',').map(s=>s.trim()).filter(Boolean):[];
+  }
+  function setSelectedTropes(hid,sid,arr){
+    const el=document.getElementById(hid);
+    if(el)el.value=arr.join(',');
+    renderSelected(arr);
+  }
+  setSelectedTropes(hidId,selId,selected);
+
+  // Suffix to identify add vs edit form
+  const sfx=selId.includes('Add')?'Add':'Edit';
+
+  // Search input
+  const searchEl=document.getElementById('tropeSearch'+sfx);
+  const suggestEl=document.getElementById('tropeSuggest'+sfx);
+  if(searchEl&&suggestEl){
+    searchEl.oninput=function(){
+      const q=this.value.toLowerCase().trim();
+      if(!q){suggestEl.style.display='none';return;}
+      const matches=TROPES.filter(t=>t.toLowerCase().includes(q)).slice(0,8);
+      if(!matches.length){suggestEl.style.display='none';return;}
+      suggestEl.innerHTML=matches.map(t=>`<div class="trope-suggest-item" data-t="${t}">${t}</div>`).join('');
+      suggestEl.style.display='block';
+      suggestEl.querySelectorAll('.trope-suggest-item').forEach(el=>{
+        el.onclick=()=>{
+          const cur=getSelectedTropes(hidId);
+          if(!cur.includes(el.dataset.t))setSelectedTropes(hidId,selId,[...cur,el.dataset.t]);
+          searchEl.value='';suggestEl.style.display='none';
+        };
+      });
+    };
+    document.addEventListener('click',function(e){
+      if(!suggestEl.contains(e.target)&&e.target!==searchEl)suggestEl.style.display='none';
+    });
+  }
+
+  // Browse panel
+  const browseBtn=document.getElementById('tropeBrowse'+sfx);
+  const browsePanel=document.getElementById('tropePanel'+sfx);
+  if(browseBtn&&browsePanel){
+    browseBtn.onclick=function(){
+      const open=browsePanel.style.display!=='none';
+      if(open){browsePanel.style.display='none';browseBtn.textContent='Browse all tropes ▾';return;}
+      browsePanel.innerHTML='';
+      Object.entries(TROPES_BY_CAT).forEach(([cat,tropes])=>{
+        const sec=document.createElement('div');sec.className='trope-cat-sec';
+        sec.innerHTML=`<div class="trope-cat-lbl">${cat}</div>`;
+        const chips=document.createElement('div');chips.className='genre-chips';chips.style.marginTop='4px';
+        tropes.forEach(t=>{
+          const b=document.createElement('button');b.type='button';
+          const cur=getSelectedTropes(hidId);
+          b.className='gchip'+(cur.includes(t)?' selected':'');
+          b.textContent=t;
+          b.onclick=()=>{
+            const cur2=getSelectedTropes(hidId);
+            if(cur2.includes(t)){setSelectedTropes(hidId,selId,cur2.filter(x=>x!==t));}
+            else{setSelectedTropes(hidId,selId,[...cur2,t]);}
+            b.classList.toggle('selected',!cur2.includes(t));
+          };
+          chips.appendChild(b);
+        });
+        sec.appendChild(chips);browsePanel.appendChild(sec);
+      });
+      browsePanel.style.display='block';
+      browseBtn.textContent='Browse all tropes ▴';
+    };
+  }
+}
+
+function buildElemChips(selId, hidId, selected){
+  const selWrap=document.getElementById(selId);
+  if(!selWrap)return;
+  function renderSelected(items){
+    selWrap.innerHTML='';
+    items.forEach(t=>{
+      const b=document.createElement('button');b.type='button';
+      b.className='gchip selected';b.style.background='#e0f2fe';b.style.color='#0369a1';b.style.borderColor='#7dd3fc';
+      b.textContent=t+' ×';
+      b.addEventListener('click',()=>{setSelected(getSelected().filter(x=>x!==t));});
+      selWrap.appendChild(b);
+    });
+  }
+  function getSelected(){const v=document.getElementById(hidId)?.value||'';return v?v.split(',').map(s=>s.trim()).filter(Boolean):[];}
+  function setSelected(arr){const el=document.getElementById(hidId);if(el)el.value=arr.join(',');renderSelected(arr);}
+  setSelected(selected);
+  const sfx=selId.includes('Add')?'Add':'Edit';
+  const searchEl=document.getElementById('elemSearch'+sfx);
+  const suggestEl=document.getElementById('elemSuggest'+sfx);
+  if(searchEl&&suggestEl){
+    searchEl.oninput=function(){
+      const q=this.value.toLowerCase().trim();
+      if(!q){suggestEl.style.display='none';return;}
+      const matches=ELEMENTS.filter(t=>t.toLowerCase().includes(q)).slice(0,8);
+      if(!matches.length){suggestEl.style.display='none';return;}
+      suggestEl.innerHTML=matches.map(t=>`<div class="trope-suggest-item" data-t="${t}">${t}</div>`).join('');
+      suggestEl.style.display='block';
+      suggestEl.querySelectorAll('.trope-suggest-item').forEach(el=>{
+        el.onclick=()=>{const cur=getSelected();if(!cur.includes(el.dataset.t))setSelected([...cur,el.dataset.t]);searchEl.value='';suggestEl.style.display='none';};
+      });
+    };
+  }
+  const browseBtn=document.getElementById('elemBrowse'+sfx);
+  const browsePanel=document.getElementById('elemPanel'+sfx);
+  if(browseBtn&&browsePanel){
+    browseBtn.onclick=function(){
+      const open=browsePanel.style.display!=='none';
+      if(open){browsePanel.style.display='none';browseBtn.textContent='Browse all elements ▾';return;}
+      browsePanel.innerHTML='';
+      Object.entries(ELEMENTS_BY_CAT).forEach(([cat,items])=>{
+        const sec=document.createElement('div');sec.className='trope-cat-sec';
+        sec.innerHTML=`<div class="trope-cat-lbl">${cat}</div>`;
+        const chips=document.createElement('div');chips.className='genre-chips';chips.style.marginTop='4px';
+        items.forEach(t=>{
+          const b=document.createElement('button');b.type='button';
+          const cur=getSelected();
+          b.className='gchip'+(cur.includes(t)?' selected':'');
+          b.textContent=t;
+          b.onclick=()=>{const cur2=getSelected();if(cur2.includes(t)){setSelected(cur2.filter(x=>x!==t));}else{setSelected([...cur2,t]);}b.classList.toggle('selected',!cur2.includes(t));};
+          chips.appendChild(b);
+        });
+        sec.appendChild(chips);browsePanel.appendChild(sec);
+      });
+      browsePanel.style.display='block';browseBtn.textContent='Browse all elements ▴';
+    };
+  }
+}
+
 function buildChips(cid,hid,sel){
   const w=document.getElementById(cid);w.innerHTML='';
   GENRES.forEach(g=>{
@@ -2491,6 +2736,8 @@ function openForm(){
   document.getElementById('backdropUrlAdd').value='';
   document.getElementById('backdropDataAdd').value='';
   buildChips('genreChipsAdd','genreHiddenAdd',[]);
+  buildTropeChips('tropeSelectedAdd','tropeHiddenAdd',[]);
+  buildElemChips('elemSelectedAdd','elemHiddenAdd',[]);
   buildRelease('releaseDateContainerAdd','releaseLabelAdd',true,null);
   injectDynFields('Add',type,status,{});
   updateStatusVisibility('Add');
@@ -2604,6 +2851,8 @@ function openEdit(id){
   document.getElementById('backdropUrlEdit').value='';
   document.getElementById('backdropDataEdit').value=en.backdrop||'';
   buildChips('genreChipsEdit','genreHiddenEdit',en.genres||[]);
+  buildTropeChips('tropeSelectedEdit','tropeHiddenEdit',en.tropes||[]);
+  buildElemChips('elemSelectedEdit','elemHiddenEdit',en.elements||[]);
   let rdVals=null;
   if(isSeries&&en.releaseDate?.startsWith('{')){try{rdVals=JSON.parse(en.releaseDate);}catch(e){}}
   else if(!isSeries&&en.releaseDate)rdVals=en.releaseDate;  buildRelease('releaseDateContainerEdit','releaseLabelEdit',isSeries,rdVals);
@@ -3551,6 +3800,21 @@ function openDrawer(id){
 
   // Genres
   document.getElementById('drawerGenres').innerHTML=(en.genres||[]).map(g=>'<span class="drawer-chip">'+esc(g)+'</span>').join('');
+  // Tropes in drawer
+  const tropeEl=document.getElementById('drawerTropes');
+  const tropeSec=document.getElementById('drawerTropeSection');
+  if(tropeEl&&tropeSec){
+    const tropes=en.tropes||[];
+    if(tropes.length){tropeSec.style.display='';tropeEl.innerHTML=tropes.map(t=>'<span class="drawer-chip trope-chip">'+esc(t)+'</span>').join('');}
+    else{tropeSec.style.display='none';}
+  }
+  const elemEl=document.getElementById('drawerElems');
+  const elemSec=document.getElementById('drawerElemSection');
+  if(elemEl&&elemSec){
+    const elems=en.elements||[];
+    if(elems.length){elemSec.style.display='';elemEl.innerHTML=elems.map(t=>'<span class="drawer-chip elem-chip">'+esc(t)+'</span>').join('');}
+    else{elemSec.style.display='none';}
+  }
 
   // Meta grid — Type moved to rating row, not here
   const meta=[];
