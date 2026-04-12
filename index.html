@@ -607,6 +607,25 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
 #btnMobileMenu{display:none;}
 
+/* iOS PWA specific */
+@supports (-webkit-touch-callout: none) {
+  body{
+    overscroll-behavior-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .topbar{
+    /* Taller to avoid buttons clipping under notch */
+    padding-top:max(env(safe-area-inset-top,0px), 14px);
+    padding-bottom:8px;
+    align-items:flex-end;
+    box-sizing:border-box;
+  }
+  .topbar > *{
+    margin-bottom:0;
+  }
+}
+
+
 @media(max-width:768px){
   .detail-drawer{
     width:100vw;
@@ -636,8 +655,8 @@ body.dark .modal-head h2{color:#f4f4f5;}
   /* Brand takes remaining space */
   .topbar-brand{flex:1;min-width:0;}
   /* Title font smaller on mobile */
-  .topbar-title{font-size:12px!important;gap:2px!important;}
-  .topbar-title svg{width:20px!important;height:20px!important;}
+  .topbar-title{font-size:10px!important;gap:2px!important;line-height:1.2;}
+  .topbar-title svg{width:14px!important;height:14px!important;}
 }
 
 
@@ -704,6 +723,25 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .mob-only{display:none!important;}
 #btnMobileMenu{display:none;}
 
+/* iOS PWA specific */
+@supports (-webkit-touch-callout: none) {
+  body{
+    overscroll-behavior-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .topbar{
+    /* Taller to avoid buttons clipping under notch */
+    padding-top:max(env(safe-area-inset-top,0px), 14px);
+    padding-bottom:8px;
+    align-items:flex-end;
+    box-sizing:border-box;
+  }
+  .topbar > *{
+    margin-bottom:0;
+  }
+}
+
+
 @media(max-width:768px){
   .detail-drawer{
     width:100vw;
@@ -733,8 +771,8 @@ body.dark .modal-head h2{color:#f4f4f5;}
   /* Brand takes remaining space */
   .topbar-brand{flex:1;min-width:0;}
   /* Title font smaller on mobile */
-  .topbar-title{font-size:12px!important;gap:2px!important;}
-  .topbar-title svg{width:20px!important;height:20px!important;}
+  .topbar-title{font-size:10px!important;gap:2px!important;line-height:1.2;}
+  .topbar-title svg{width:14px!important;height:14px!important;}
 }
 
 
