@@ -607,6 +607,23 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
 #btnMobileMenu{display:none;}
 
+@media(max-width:768px){
+  /* Topbar right - tighter */
+  .topbar > div:last-child{gap:2px!important;}
+  /* Hide year review button on mobile */
+  #btnYearReview{display:none;}
+  /* Dark toggle smaller */
+  .btn-dark-toggle{font-size:14px;padding:3px 5px;}
+  /* Add Entry button smaller */
+  .btn.btn-light{font-size:11px;padding:5px 8px;}
+  /* Brand takes remaining space */
+  .topbar-brand{flex:1;min-width:0;}
+  /* Title font smaller on mobile */
+  .topbar-title{font-size:14px!important;gap:2px!important;}
+  .topbar-title svg{width:20px!important;height:20px!important;}
+}
+
+
 
 @media(max-width:768px){
   /* Hide Firebase dot on mobile - save header space */
@@ -669,6 +686,23 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .sp-desktop{display:flex!important;}
 .mob-only{display:none!important;}
 #btnMobileMenu{display:none;}
+
+@media(max-width:768px){
+  /* Topbar right - tighter */
+  .topbar > div:last-child{gap:2px!important;}
+  /* Hide year review button on mobile */
+  #btnYearReview{display:none;}
+  /* Dark toggle smaller */
+  .btn-dark-toggle{font-size:14px;padding:3px 5px;}
+  /* Add Entry button smaller */
+  .btn.btn-light{font-size:11px;padding:5px 8px;}
+  /* Brand takes remaining space */
+  .topbar-brand{flex:1;min-width:0;}
+  /* Title font smaller on mobile */
+  .topbar-title{font-size:14px!important;gap:2px!important;}
+  .topbar-title svg{width:20px!important;height:20px!important;}
+}
+
 
 @media(min-width:769px){
   .main-sticky{padding:12px 24px 0;}
