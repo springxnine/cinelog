@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light only">
+<meta name="application-name" content="CineLog">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CineLog">
+<meta name="theme-color" content="#1e1e1e">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>:root{color-scheme:light;}</style>
 <title>CineLog</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -225,35 +233,159 @@ body.dark .card-rating{color:#f0f0f0;}
 /* FORM PANEL */
 .form-overlay{display:none;position:fixed;inset:0;backdrop-filter:blur(4px) saturate(0.92);-webkit-backdrop-filter:blur(4px) saturate(0.92);background:rgba(0,0,0,0.12);z-index:200;}
 .form-overlay.active{display:flex;align-items:center;justify-content:center;}
-.form-panel{background:white;width:40vw;min-width:380px;max-width:680px;max-height:90vh;overflow-y:auto;padding:28px 26px;border-radius:16px;box-shadow:0 24px 64px rgba(0,0,0,0.18),0 8px 24px rgba(0,0,0,0.1);}
-.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
-.panel-head h2{font-family:"Inter",system-ui,sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.3px;}
-.btn-x{background:none;border:none;font-size:22px;cursor:pointer;color:#ccc;line-height:1;padding:0;}
-.btn-x:hover{color:#1e1e1e;}
-.fg{margin-bottom:12px;}
-.fg label{display:block;font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;margin-bottom:5px;}
-/* Form section groups */
-.form-section{margin-bottom:20px;}
-.form-section-title{font-size:9px;font-weight:800;color:#1a1a1a;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;padding:5px 10px;background:#f0f0f0;border-radius:6px;display:inline-block;}
-.fg input,.fg select,.fg textarea{width:100%;padding:9px 11px;background:#fafafa;border:1px solid #e0e0e0;border-radius:6px;font-family:inherit;font-size:13px;}
-.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;background:white;border-color:#1e1e1e;}
-.fg textarea{resize:vertical;min-height:68px;}
-.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.form-hint{font-size:10px;color:#ccc;margin-top:3px;}
-.rating-row{display:flex;align-items:center;gap:8px;}
-.rating-val{font-weight:700;font-size:16px;min-width:22px;}
-.rt-toggle{display:flex;background:#f0f0f0;border-radius:6px;padding:2px;gap:2px;margin-bottom:6px;}
-.rt-toggle button{padding:4px 10px;border:none;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:#aaa;font-family:inherit;transition:all 0.2s;}
-.rt-toggle button.active{background:white;color:#1e1e1e;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
-.rt-row{display:flex;gap:5px;align-items:center;}
-.rt-row input{flex:1;}
-.year-row{display:flex;gap:8px;align-items:center;}
-.year-row input{flex:1;}
-.year-sep{color:#ccc;font-weight:700;}
-.genre-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 4px;}
-.gchip{padding:5px 11px;border-radius:16px;border:1.5px solid #e0e0e0;background:white;color:#888;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.15s;font-family:inherit;user-select:none;}
-.gchip:hover{border-color:#888;color:#444;}
-.gchip.selected{background:#1e1e1e;color:white;border-color:#1e1e1e;}
+
+/* ── Modern Form Design ── */
+.form-panel{
+  background:#fff;
+  width:42vw;min-width:400px;max-width:700px;
+  max-height:92vh;overflow-y:auto;
+  padding:0;
+  border-radius:20px;
+  box-shadow:0 32px 80px rgba(0,0,0,0.2),0 8px 24px rgba(0,0,0,0.08);
+}
+.panel-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:22px 28px 18px;
+  border-bottom:1px solid #f0f0f0;
+  position:sticky;top:0;background:white;z-index:10;
+  border-radius:20px 20px 0 0;
+}
+.panel-head h2{
+  font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#111;
+}
+.btn-x{
+  background:#f4f4f5;border:none;width:32px;height:32px;
+  border-radius:50%;font-size:16px;cursor:pointer;
+  color:#888;display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;
+}
+.btn-x:hover{background:#e4e4e7;color:#111;}
+
+/* Form body padding */
+#addForm,#editForm{padding:20px 28px 28px;}
+
+/* Section dividers */
+.form-section{margin-bottom:24px;}
+.form-section-title{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:800;
+  color:#6366f1;
+  text-transform:uppercase;letter-spacing:1.2px;
+  margin-bottom:14px;
+  padding-bottom:8px;
+  border-bottom:2px solid #eef2ff;
+}
+.form-section-title::before{
+  content:'';width:3px;height:14px;
+  background:#6366f1;border-radius:2px;
+  flex-shrink:0;
+}
+
+/* Field labels */
+.fg{margin-bottom:14px;}
+.fg label{
+  display:block;
+  font-size:11px;font-weight:700;
+  color:#374151;
+  text-transform:uppercase;letter-spacing:0.6px;
+  margin-bottom:6px;
+}
+
+/* Inputs */
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:10px 13px;
+  background:#f9fafb;
+  border:1.5px solid #e5e7eb;
+  border-radius:10px;
+  font-family:inherit;font-size:13px;color:#111;
+  transition:border-color 0.15s,background 0.15s;
+  box-sizing:border-box;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  outline:none;background:white;
+  border-color:#6366f1;
+  box-shadow:0 0 0 3px rgba(99,102,241,0.1);
+}
+.fg textarea{resize:vertical;min-height:72px;line-height:1.5;}
+.form-hint{font-size:10px;color:#9ca3af;margin-top:4px;}
+
+/* Rating slider */
+.rating-row{display:flex;align-items:center;gap:10px;}
+.rating-val{
+  font-weight:800;font-size:18px;min-width:28px;
+  color:#6366f1;text-align:center;
+}
+input[type=range]{accent-color:#6366f1;}
+
+/* Genre chips */
+.gchip{
+  padding:5px 13px;border-radius:20px;
+  border:1.5px solid #e5e7eb;
+  background:#f9fafb;color:#6b7280;
+  font-size:12px;font-weight:600;
+  cursor:pointer;transition:all 0.15s;
+  font-family:inherit;
+}
+.gchip:hover{border-color:#6366f1;color:#6366f1;background:#eef2ff;}
+.gchip.selected{background:#6366f1;color:white;border-color:#6366f1;}
+
+/* Save / cancel buttons */
+.btn-save{
+  background:linear-gradient(135deg,#4f46e5,#6366f1);
+  color:white;border:none;
+  padding:13px 24px;border-radius:12px;
+  font-size:14px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+  width:100%;transition:opacity 0.15s;
+  letter-spacing:-0.2px;
+}
+.btn-save:hover{opacity:0.9;}
+.btn-cncl{
+  background:#f4f4f5;color:#6b7280;border:none;
+  padding:13px 20px;border-radius:12px;
+  font-size:14px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+  transition:all 0.15s;
+}
+.btn-cncl:hover{background:#e4e4e7;color:#111;}
+.btn-grp{display:flex;gap:10px;margin-top:20px;}
+.btn-grp .btn-save{flex:2;}
+.btn-grp .btn-cncl{flex:1;}
+
+/* Segmented control (rt-toggle) */
+.rt-toggle{
+  display:flex;background:#f3f4f6;
+  border-radius:10px;padding:3px;gap:3px;margin-bottom:8px;
+}
+.rt-toggle button{
+  padding:6px 12px;border:none;border-radius:8px;
+  font-size:11px;font-weight:700;cursor:pointer;
+  background:transparent;color:#9ca3af;
+  font-family:inherit;transition:all 0.15s;flex:1;
+}
+.rt-toggle button.active{
+  background:white;color:#4f46e5;
+  box-shadow:0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* Dark mode */
+body.dark .form-panel{background:#18181b;}
+body.dark .panel-head{background:#18181b;border-bottom-color:#27272a;}
+body.dark .panel-head h2{color:#f4f4f5;}
+body.dark .btn-x{background:#27272a;color:#a1a1aa;}
+body.dark .btn-x:hover{background:#3f3f46;color:white;}
+body.dark .form-section-title{color:#818cf8;border-bottom-color:#1e1b4b;}
+body.dark .form-section-title::before{background:#818cf8;}
+body.dark .fg label{color:#d1d5db;}
+body.dark .fg input,body.dark .fg select,body.dark .fg textarea{background:#27272a;border-color:#3f3f46;color:#f4f4f5;}
+body.dark .fg input:focus,body.dark .fg select:focus,body.dark .fg textarea:focus{border-color:#818cf8;background:#1f1f28;}
+body.dark .gchip{background:#27272a;border-color:#3f3f46;color:#a1a1aa;}
+body.dark .gchip:hover{border-color:#818cf8;color:#818cf8;background:#1e1b4b;}
+body.dark .gchip.selected{background:#4f46e5;border-color:#4f46e5;color:white;}
+body.dark .btn-cncl{background:#27272a;color:#a1a1aa;}
+body.dark .rt-toggle{background:#27272a;}
+body.dark .rt-toggle button.active{background:#3f3f46;color:#818cf8;}
+
 /* Trope chips */
 
 /* Trope hybrid UI */
@@ -263,6 +395,9 @@ body.dark .card-rating{color:#f0f0f0;}
 .trope-suggest{position:absolute;top:calc(100% + 4px);left:0;right:0;background:white;border:1.5px solid #e0e0e0;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.1);z-index:50;overflow:hidden;}
 .trope-suggest-item{padding:8px 12px;font-size:13px;cursor:pointer;color:#333;}
 .trope-suggest-item:hover{background:#f5f3ff;color:#5b21b6;}
+.trope-suggest-item.focused{background:#f5f3ff;color:#5b21b6;}
+body.dark .trope-suggest-item.focused{background:#2e1065;color:#c4b5fd;}
+
 .trope-browse-btn{background:none;border:1.5px solid #e0e0e0;color:#888;padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin:4px 0;transition:all 0.15s;}
 .trope-browse-btn:hover{border-color:#6d28d9;color:#6d28d9;}
 .trope-browse-panel{margin-top:6px;}
@@ -309,9 +444,12 @@ body.dark .trope-chip{background:#2e1065!important;color:#c4b5fd!important;borde
 .btn-grp{display:flex;gap:8px;margin-top:4px;}
 .modal{display:none;position:fixed;inset:0;backdrop-filter:blur(4px) saturate(0.92);-webkit-backdrop-filter:blur(4px) saturate(0.92);background:rgba(0,0,0,0.12);z-index:300;align-items:center;justify-content:center;}
 .modal.show{display:flex;}
-.modal-box{background:white;width:40vw;min-width:380px;max-width:680px;border-radius:16px;padding:28px 26px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,0.18),0 8px 24px rgba(0,0,0,0.1);}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #ebebeb;}
-.modal-head h2{font-family:"Inter",system-ui,sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.3px;}
+.modal-box{background:white;width:42vw;min-width:400px;max-width:700px;border-radius:20px;padding:0;max-height:92vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,0.2),0 8px 24px rgba(0,0,0,0.08);}
+body.dark .modal-box{background:#18181b;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:22px 28px 18px;border-bottom:1px solid #f0f0f0;position:sticky;top:0;background:white;z-index:10;border-radius:20px 20px 0 0;}
+.modal-head h2{font-size:20px;font-weight:800;letter-spacing:-0.5px;color:#111;}
+body.dark .modal-head{background:#18181b;border-bottom-color:#27272a;}
+body.dark .modal-head h2{color:#f4f4f5;}
 /* Notes — faded */
 .card-note{margin-top:6px;font-size:10px;color:#ccc;font-style:italic;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 /* Progress bar on card */
@@ -463,13 +601,7 @@ body.dark .trope-chip{background:#2e1065!important;color:#c4b5fd!important;borde
 /* Mobile sidebar toggle button */
 
 /* Toolbar responsive */
-.tb-desktop{} /* show on desktop by default */
-.tb-mobile-only{display:none;}
-@media(max-width:768px){
-  .tb-desktop{display:none!important;}
-  .tb-mobile-only{display:flex!important;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:2px 0;}
-  .tb-mobile-only::-webkit-scrollbar{display:none;}
-}
+/* toolbar responsive rules moved to main mobile block */
 
 #btnMobileMenu{display:none;}
 
@@ -941,23 +1073,25 @@ body.dark .cf-title{color:#f0f0f0;}
 /* ── Poster-only: Prime Video expand style ── */
 .entries-grid.poster-only{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-  gap:10px 8px;
+  grid-template-columns:repeat(7,1fr);
+  gap:8px;
   align-items:start;
 }
 .entries-grid.poster-only .entry-card{
   background:none;border:none;border-radius:10px;
-  overflow:visible; /* allow expand */
+  overflow:visible;
   box-shadow:none;
   transform:none;
   transition:none;
   position:relative;
-  z-index:1;
+  z-index:0;
+  width:100%;
 }
 .entries-grid.poster-only .entry-card:hover{
   z-index:100;
   transform:none;
   box-shadow:none;
+  isolation:isolate;
 }
 .entries-grid.poster-only .card-body{display:none;}
 .entries-grid.poster-only .poster-actions{opacity:0;transition:opacity 0.15s;}
@@ -1069,6 +1203,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
         <div class="backup-menu-item" id="bmiExportCsv"><span class="bmi-icon">📊</span><div class="bmi-info"><div class="bmi-title">Export CSV</div><div class="bmi-sub">Open in Excel or Sheets</div></div></div>
       </div>
     </div>
+    <button id="btnNotif" title="Enable notifications" onclick="window._requestNotifPermission&&window._requestNotifPermission().then(ok=>{if(ok){document.getElementById('btnNotif').textContent='🔔';window._scheduleComingUpNotifs&&window._scheduleComingUpNotifs();toast('Notifications enabled ✓','success');}else{toast('Notifications blocked','error');}})" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:16px;cursor:pointer;padding:4px 6px;line-height:1;" class="fb-dot">🔕</button>
     <span id="fbStatus" title="Firebase sync" style="font-size:11px;color:rgba(255,255,255,0.4);padding:4px 6px;" class="fb-dot">⬤</span><button class="btn-dark-toggle" id="btnDarkMode" title="Toggle dark mode">🌙</button>
     <button class="btn-dark-toggle" id="btnYearReview" title="Year in Review" style="font-size:16px;">🎬</button>
     <button class="btn btn-light" id="btnOpenForm" style="white-space:nowrap;">+ Add Entry</button>
@@ -1160,6 +1295,8 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
         <select class="sel tb-desktop" id="filterType"><option value="">All Types</option><option value="series">📺 Series</option><option value="movie">🎬 Movie</option></select>
         <select class="sel tb-desktop" id="filterGenre"><option value="">All Genres</option></select>
         <select class="sel tb-desktop" id="filterPlatform"><option value="">All Platforms</option></select>
+        <select class="sel tb-desktop" id="filterTrope"><option value="">All Tropes</option></select>
+        <select class="sel tb-desktop" id="filterRating"><option value="">Any Rating</option><option value="9">★ 9+</option><option value="8">★ 8+</option><option value="7">★ 7+</option><option value="5">★ 5+</option><option value="r0-5">★ ≤5</option></select>
         <select class="sel tb-desktop" id="sortBy">
           <option value="added">Recently Added</option>
           <option value="finish_date" selected>Recently Finished</option>
@@ -1177,6 +1314,8 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
         <select class="sel" id="filterTypeMob"><option value="">All Types</option><option value="series">📺 Series</option><option value="movie">🎬 Movie</option></select>
         <select class="sel" id="filterGenreMob"><option value="">All Genres</option></select>
         <select class="sel" id="filterPlatformMob"><option value="">All Platforms</option></select>
+        <select class="sel" id="filterTropeMob"><option value="">All Tropes</option></select>
+        <select class="sel" id="filterRatingMob"><option value="">Any Rating</option><option value="9">★ 9+</option><option value="8">★ 8+</option><option value="7">★ 7+</option><option value="5">★ 5+</option><option value="r0-5">★ ≤5</option></select>
       </div>
       <!-- Desktop status row -->
       <div class="status-pills" id="statusPills" style="display:flex;align-items:center;justify-content:space-between;">
@@ -1407,7 +1546,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
 <div id="editModal" class="modal">
   <div class="modal-box">
     <div class="modal-head"><h2>Edit Entry</h2><button class="btn-x" id="btnCloseModal">&times;</button></div>
-    <form id="editForm">
+    <form id="editForm" style="padding:20px 28px 28px;">
 
       <!-- GROUP 1: Basic Info -->
       <div class="form-section">
@@ -1710,18 +1849,18 @@ console.log('Firebase ready ✓');
 <script>
 const GENRES=['Action','Adventure','Animation','Comedy','Crime','Drama','Family','Fantasy','Horror','K-Drama','LGBTQ+','Musical','Mystery','Romance','Sci-Fi','Superhero','Thriller','Young Adult'];
 const TROPES_BY_CAT={
-  'Romance':['Enemies to Lovers','Slow Burn','Fake Dating','Second Chance','Love Triangle','Forbidden Love','Forced Proximity','Childhood Friends','Opposites Attract','One Bed','Power Couple','Unrequited Love','Friends to Lovers','Age Gap','Grumpy x Sunshine','Workplace Romance','Marriage of Convenience','Soulmates','Secret Royalty'],
-  'Family & Found Family':['Found Family','Mentor & Student','Sibling Rivalry','Parental Issues'],
-  'Identity & Growth':['Coming of Age','Redemption Arc','Hidden Identity','Fish Out of Water','Underdog','Self-Discovery','Imposter Syndrome'],
-  'Plot & Conflict':['Chosen One','Revenge Plot','Rivals','Political Intrigue','Survival','Heist','Time Loop','Road Trip','Unreliable Narrator','Mystery Box','Whodunit'],
-  'Character Dynamics':['Amnesia','Odd Couple','Bromance','Anti-Hero','I Can Fix Him','Class Disparity','Morally Grey'],
+  '💕 Romance':['Enemies to Lovers','Slow Burn','Fake Dating','Second Chance','Love Triangle','Forbidden Love','Forced Proximity','Childhood Friends','Opposites Attract','One Bed','Power Couple','Unrequited Love','Friends to Lovers','Age Gap','Grumpy x Sunshine','Workplace Romance','Marriage of Convenience','Soulmates','Secret Royalty'],
+  '👨‍👩‍👧 Family & Found Family':['Found Family','Mentor & Student','Sibling Rivalry','Parental Issues'],
+  '🌱 Identity & Growth':['Coming of Age','Redemption Arc','Hidden Identity','Fish Out of Water','Underdog','Self-Discovery','Imposter Syndrome'],
+  '⚔️ Plot & Conflict':['Chosen One','Revenge Plot','Rivals','Political Intrigue','Survival','Heist','Time Loop','Road Trip','Unreliable Narrator','Mystery Box','Whodunit'],
+  '🎭 Character Dynamics':['Amnesia','Odd Couple','Bromance','Anti-Hero','I Can Fix Him','Class Disparity','Morally Grey'],
 };
 const TROPES=Object.values(TROPES_BY_CAT).flat();
 const ELEMENTS_BY_CAT={
-  'Life & Setting':['High School','College','Workplace','Small Town','High Society'],
-  'Lifestyle & Culture':['Music','Dance','Fashion','Sports','Celebrity'],
-  'Situation & World':['Supernatural','Time Travel','Survival','Historical','Mafia'],
-  'Core Themes':['Self-discovery','Coming of Age','Friendship','Family','Self-love'],
+  '🎓 Life & Setting':['High School','College','Workplace','Small Town','High Society'],
+  '🎤 Lifestyle & Culture':['Music','Dance','Fashion','Sports','Celebrity'],
+  '🌍 Situation & World':['Supernatural','Time Travel','Survival','Historical','Mafia','Royalty','Politics'],
+  '🧠 Core Themes':['Self-discovery','Coming of Age','Friendship','Family','Self-love'],
 };
 const ELEMENTS=Object.values(ELEMENTS_BY_CAT).flat();
 
@@ -2313,7 +2452,6 @@ function buildTropeChips(selId, hidId, selected){
 
   // Suffix to identify add vs edit form
   const sfx=selId.includes('Add')?'Add':'Edit';
-
   // Search input
   const searchEl=document.getElementById('tropeSearch'+sfx);
   const suggestEl=document.getElementById('tropeSuggest'+sfx);
@@ -2333,6 +2471,11 @@ function buildTropeChips(selId, hidId, selected){
         };
       });
     };
+    addKeyNav(searchEl,suggestEl,(t)=>{
+      const cur=getSelectedTropes(hidId);
+      if(!cur.includes(t))setSelectedTropes(hidId,selId,[...cur,t]);
+      searchEl.value='';suggestEl.style.display='none';
+    });
     document.addEventListener('click',function(e){
       if(!suggestEl.contains(e.target)&&e.target!==searchEl)suggestEl.style.display='none';
     });
@@ -2345,6 +2488,10 @@ function buildTropeChips(selId, hidId, selected){
     browseBtn.onclick=function(){
       const open=browsePanel.style.display!=='none';
       if(open){browsePanel.style.display='none';browseBtn.textContent='Browse all tropes ▾';return;}
+      // Accordion: close element panel in same form
+      const sfx2=selId.includes('Add')?'Add':'Edit';
+      const ep=document.getElementById('elemPanel'+sfx2);const eb=document.getElementById('elemBrowse'+sfx2);
+      if(ep){ep.style.display='none';}if(eb)eb.textContent='Browse all elements ▾';
       browsePanel.innerHTML='';
       Object.entries(TROPES_BY_CAT).forEach(([cat,tropes])=>{
         const sec=document.createElement('div');sec.className='trope-cat-sec';
@@ -2369,6 +2516,67 @@ function buildTropeChips(selId, hidId, selected){
       browseBtn.textContent='Browse all tropes ▴';
     };
   }
+}
+
+function addKeyNav(searchEl, suggestEl, selectFn){
+  let focusIdx=-1;
+  searchEl.addEventListener('keydown',function(e){
+    const items=suggestEl.querySelectorAll('.trope-suggest-item');
+    if(!items.length)return;
+    if(e.key==='ArrowDown'){
+      e.preventDefault();
+      focusIdx=Math.min(focusIdx+1,items.length-1);
+      items.forEach((el,i)=>el.classList.toggle('focused',i===focusIdx));
+      items[focusIdx]?.scrollIntoView({block:'nearest'});
+    }else if(e.key==='ArrowUp'){
+      e.preventDefault();
+      focusIdx=Math.max(focusIdx-1,0);
+      items.forEach((el,i)=>el.classList.toggle('focused',i===focusIdx));
+      items[focusIdx]?.scrollIntoView({block:'nearest'});
+    }else if(e.key==='Enter'&&focusIdx>=0&&suggestEl.style.display!=='none'){
+      e.preventDefault();
+      const t=items[focusIdx]?.dataset?.t;
+      if(t){selectFn(t);focusIdx=-1;}
+    }else if(e.key==='Escape'){
+      suggestEl.style.display='none';focusIdx=-1;
+    }else{
+      focusIdx=-1;
+      items.forEach(el=>el.classList.remove('focused'));
+    }
+  });
+}
+function addKeyNav(searchEl, suggestEl, selectFn){
+  let focusIdx=-1;
+  searchEl.addEventListener('keydown',function(e){
+    const items=suggestEl.querySelectorAll('.trope-suggest-item');
+    if(!items.length)return;
+    if(e.key==='ArrowDown'){
+      e.preventDefault();
+      focusIdx=Math.min(focusIdx+1,items.length-1);
+      items.forEach((el,i)=>el.classList.toggle('focused',i===focusIdx));
+      items[focusIdx]?.scrollIntoView({block:'nearest'});
+    }else if(e.key==='ArrowUp'){
+      e.preventDefault();
+      focusIdx=Math.max(focusIdx-1,0);
+      items.forEach((el,i)=>el.classList.toggle('focused',i===focusIdx));
+      items[focusIdx]?.scrollIntoView({block:'nearest'});
+    }else if(e.key==='Enter'&&focusIdx>=0&&suggestEl.style.display!=='none'){
+      e.preventDefault();
+      const t=items[focusIdx]?.dataset?.t;
+      if(t){selectFn(t);focusIdx=-1;}
+    }else if(e.key==='Escape'){
+      suggestEl.style.display='none';focusIdx=-1;
+    }else{
+      focusIdx=-1;
+      items.forEach(el=>el.classList.remove('focused'));
+    }
+});
+  // Reset focus index when new results shown
+  const origInput=searchEl.oninput;
+  searchEl.oninput=function(ev){
+    focusIdx=-1;
+    if(origInput)origInput.call(this,ev);
+};
 }
 
 function buildElemChips(selId, hidId, selected){
@@ -2402,6 +2610,10 @@ function buildElemChips(selId, hidId, selected){
         el.onclick=()=>{const cur=getSelected();if(!cur.includes(el.dataset.t))setSelected([...cur,el.dataset.t]);searchEl.value='';suggestEl.style.display='none';};
       });
     };
+    addKeyNav(searchEl,suggestEl,(t)=>{
+      const cur=getSelected();if(!cur.includes(t))setSelected([...cur,t]);
+      searchEl.value='';suggestEl.style.display='none';
+    });
   }
   const browseBtn=document.getElementById('elemBrowse'+sfx);
   const browsePanel=document.getElementById('elemPanel'+sfx);
@@ -2409,6 +2621,10 @@ function buildElemChips(selId, hidId, selected){
     browseBtn.onclick=function(){
       const open=browsePanel.style.display!=='none';
       if(open){browsePanel.style.display='none';browseBtn.textContent='Browse all elements ▾';return;}
+      // Accordion: close trope panel in same form
+      const sfx2=selId.includes('Add')?'Add':'Edit';
+      const tp=document.getElementById('tropePanel'+sfx2);const tb=document.getElementById('tropeBrowse'+sfx2);
+      if(tp){tp.style.display='none';}if(tb)tb.textContent='Browse all tropes ▾';
       browsePanel.innerHTML='';
       Object.entries(ELEMENTS_BY_CAT).forEach(([cat,items])=>{
         const sec=document.createElement('div');sec.className='trope-cat-sec';
@@ -2806,7 +3022,9 @@ function addEntry(e){
     notes:document.getElementById('notes').value,
     poster:document.getElementById('posterDataAdd').value||'',
     backdrop:document.getElementById('backdropDataAdd').value||'',
-    collection:(document.getElementById('collectionAdd')||{value:''}).value.trim()||''
+    collection:(document.getElementById('collectionAdd')||{value:''}).value.trim()||'',
+    tropes:(document.getElementById('tropeHiddenAdd')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+    elements:(document.getElementById('elemHiddenAdd')?.value||'').split(',').map(s=>s.trim()).filter(Boolean)
   });
   const savedStatus=entries[0].status;
   save();render();updateStats();updateGenreFilter();
@@ -2895,6 +3113,8 @@ function saveEdit(e){
   const pd=document.getElementById('posterDataEdit').value;if(pd)en.poster=pd;
   const bd=document.getElementById('backdropDataEdit').value;if(bd)en.backdrop=bd;
   en.collection=(document.getElementById('collectionEdit')||{value:''}).value.trim()||'';
+  en.tropes=(document.getElementById('tropeHiddenEdit')?.value||'').split(',').map(s=>s.trim()).filter(Boolean);
+  en.elements=(document.getElementById('elemHiddenEdit')?.value||'').split(',').map(s=>s.trim()).filter(Boolean);
   save();render();updateStats();updateGenreFilter();
   if(currentView==='cal')renderCalendar();
   closeModal();
@@ -3082,6 +3302,10 @@ function clearAllFilters(){
   ['filterTypeMob','filterGenreMob','filterPlatformMob'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const sm=document.getElementById('sortByMob');if(sm)sm.value='finish_date';
   const ms=document.getElementById('mobileStatusSel');if(ms)ms.value='all';
+  const ftr=document.getElementById('filterTrope');if(ftr)ftr.value='';
+  const ftrM=document.getElementById('filterTropeMob');if(ftrM)ftrM.value='';
+  const frg=document.getElementById('filterRating');if(frg)frg.value='';
+  const frgM=document.getElementById('filterRatingMob');if(frgM)frgM.value='';
   document.getElementById('btnSearchClear').classList.remove('visible');
   document.querySelectorAll('.sp').forEach(b=>b.classList.toggle('active',b.dataset.s==='all'));
   statusFilter='all';
@@ -3137,11 +3361,18 @@ function render(){
   const ft=document.getElementById('filterType').value;
   const fg=document.getElementById('filterGenre').value;
   const fp=document.getElementById('filterPlatform').value;
+  const ftr=document.getElementById('filterTrope')?.value||'';
+  const frVal=document.getElementById('filterRating')?.value||'';
+  const frMin=frVal&&frVal!=='r0-5'?parseInt(frVal)||0:0;
+  const frMax=frVal==='r0-5'?5:0;
   const filtered=entries.filter(en=>
     (en.title.toLowerCase().includes(q)||(en.notes||'').toLowerCase().includes(q))
     &&(!ft||en.type===ft)&&(!fg||(en.genres||[]).includes(fg))
     &&(statusFilter==='all'||en.status===statusFilter)
     &&(!fp||en.platform===fp)
+    &&(!ftr||(en.tropes||[]).includes(ftr)||(en.elements||[]).includes(ftr))
+    &&(!frMin||en.rating>=frMin)
+    &&(!frMax||(en.rating>0&&en.rating<=frMax&&en.status!=='watchlist'))
   );
   const sorted=getSorted(filtered);
   if(!sorted.length){
@@ -4001,7 +4232,7 @@ document.getElementById('formOverlay').addEventListener('mouseup',e=>{if(_overla
 });
 
 load();render();updateStats();updateGenreFilter();initDarkMode();buildAutocomplete();initTmdbSearch();setCardView('poster');
-setTimeout(()=>{if(typeof renderGoal==='function'){renderGoal();if(typeof loadGoalFromFirebase==='function')loadGoalFromFirebase();}},100);
+setTimeout(function(){if(typeof renderGoal==='function'){renderGoal();if(typeof loadGoalFromFirebase==='function')loadGoalFromFirebase();}},100);
 
 // Fix content offset after toolbar renders
 function adjustMainPadding(){
@@ -4752,6 +4983,16 @@ body.dark .ai-result-box{background:#1a1a2e;border-color:#312e81;color:#e4e4e4;}
 </script>
 
 <script>
+
+// Sync trope/rating mobile filters
+['filterTrope','filterRating'].forEach(id=>{
+  const desk=document.getElementById(id);
+  const mob=document.getElementById(id+'Mob');
+  if(!desk||!mob)return;
+  desk.addEventListener('change',()=>{mob.value=desk.value;render();});
+  mob.addEventListener('change',()=>{desk.value=mob.value;render();});
+});
+
 // Sync mobile filter selects with desktop
 ['filterType','filterGenre','filterPlatform','sortBy'].forEach(id=>{
   const desk=document.getElementById(id);
@@ -4767,8 +5008,84 @@ function syncMobileDropdowns(){
   const dp=document.getElementById('filterPlatform'),mp=document.getElementById('filterPlatformMob');
   if(dp&&mp){const cv=mp.value;mp.innerHTML=dp.innerHTML;mp.value=cv||'';}
 }
+function populateTropeFilter(){
+  const sel=document.getElementById('filterTrope');
+  const selM=document.getElementById('filterTropeMob');
+  if(!sel)return;
+  const used=new Set();
+  entries.forEach(e=>{(e.tropes||[]).forEach(t=>used.add(t));(e.elements||[]).forEach(t=>used.add(t));});
+  const opts='<option value="">All Tropes & Elements</option>'+[...used].sort().map(t=>`<option value="${t}">${t}</option>`).join('');
+  sel.innerHTML=opts;
+  if(selM)selM.innerHTML=opts;
+}
 const _origUGF=updateGenreFilter;
-updateGenreFilter=function(){_origUGF();syncMobileDropdowns();};
+updateGenreFilter=function(){_origUGF();syncMobileDropdowns();populateTropeFilter();};
 // Also sync on load
-window.addEventListener('load',function(){setTimeout(syncMobileDropdowns,200);});
+window.addEventListener('load',function(){setTimeout(()=>{syncMobileDropdowns();populateTropeFilter();},300);});
+</script>
+
+
+<script>
+// ── PWA: Service Worker + Notifications ──
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(reg=>{
+    console.log('SW registered');
+    window._swReg = reg;
+  }).catch(e=>console.log('SW error:',e));
+}
+
+// ── Notification: request permission and schedule Coming Up alerts ──
+async function requestNotifPermission(){
+  if(!('Notification' in window))return false;
+  if(Notification.permission==='granted')return true;
+  const result=await Notification.requestPermission();
+  return result==='granted';
+}
+
+function scheduleComingUpNotifs(){
+  if(Notification.permission!=='granted')return;
+  const now=new Date();now.setHours(0,0,0,0);
+  const items=[];
+
+  // On Hold with nextAirDate (within 7 days)
+  entries.filter(e=>e.status==='onhold'&&e.nextAirDate).forEach(e=>{
+    const d=new Date(e.nextAirDate+'T00:00:00');
+    const diff=Math.round((d-now)/86400000);
+    if(diff>=0&&diff<=7) items.push({title:e.title,diff,label:diff===0?'airs today!':'airs in '+diff+'d'});
+  });
+
+  // Watchlist with releaseDate (within 7 days, future only)
+  entries.filter(e=>e.status==='watchlist'&&e.releaseDate).forEach(e=>{
+    let relStr='';
+    if(e.releaseDate.startsWith('{')){try{const p=JSON.parse(e.releaseDate);relStr=p.s?p.s+'-01-01':'';}catch(x){}}
+    else{relStr=e.releaseDate;}
+    if(!relStr)return;
+    const d=new Date(relStr.length===4?relStr+'-01-01':relStr+'T00:00:00');
+    const diff=Math.round((d-now)/86400000);
+    if(diff>=0&&diff<=7) items.push({title:e.title,diff,label:diff===0?'releases today!':'releases in '+diff+'d'});
+  });
+
+  if(items.length&&window._swReg){
+    const body=items.map(i=>`${i.title} — ${i.label}`).join('
+');
+    window._swReg.showNotification('CineLog · Coming Up 🎬',{
+      body,icon:'icon-192.png',badge:'icon-192.png',
+      tag:'cinelog-coming-up',renotify:true
+    });
+  }
+}
+
+// Auto-check notifications daily (on page load, once per day)
+function checkDailyNotif(){
+  if(Notification.permission!=='granted')return;
+  const key='cinelog-notif-date';
+  const today=new Date().toDateString();
+  if(localStorage.getItem(key)===today)return;
+  localStorage.setItem(key,today);
+  setTimeout(scheduleComingUpNotifs,2000); // after entries load
+}
+
+window.addEventListener('load',checkDailyNotif);
+window._requestNotifPermission=requestNotifPermission;
+window._scheduleComingUpNotifs=scheduleComingUpNotifs;
 </script>
