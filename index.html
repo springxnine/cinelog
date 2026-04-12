@@ -130,7 +130,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 
 /* MAIN */
 .main{padding:0;}
-.main-sticky{position:fixed;top:calc(56px + env(safe-area-inset-top, 0px));left:285px;right:0;z-index:90;background:#f0ede8;padding:12px 24px 0;box-shadow:0 1px 0 rgba(0,0,0,0.06);}
+.main-sticky{position:fixed;top:calc(56px + env(safe-area-inset-top,0px));left:285px;right:0;z-index:90;background:#f0ede8;padding:12px 24px 0;box-shadow:0 1px 0 rgba(0,0,0,0.06);}
 .main-content{padding:16px 24px calc(24px + env(safe-area-inset-bottom,0));}
 .toolbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
 .search-box{position:relative;flex:1;min-width:150px;}
@@ -502,7 +502,7 @@ body.dark .modal-head h2{color:#f4f4f5;}
 /* Status badge on banner */
 .drawer-status-badge{position:absolute;top:12px;left:12px;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;}
 /* Ghost action buttons — top right of banner */
-.drawer-action-bar{position:absolute;top:10px;right:10px;display:flex;gap:6px;align-items:center;z-index:2;}
+.drawer-action-bar{position:absolute;top:10px;right:10px;display:flex;gap:6px;align-items:center;z-index:2;top:max(10px,calc(env(safe-area-inset-top,0px) + 10px));}
 .drawer-ghost-btn{background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.2);color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:all 0.18s;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
 .drawer-ghost-btn:hover{background:rgba(255,255,255,0.9);color:#1e1e1e;}
 .drawer-ghost-btn.del:hover{background:rgba(220,38,38,0.9);color:white;border-color:transparent;}
@@ -608,6 +608,23 @@ body.dark .modal-head h2{color:#f4f4f5;}
 #btnMobileMenu{display:none;}
 
 @media(max-width:768px){
+  .detail-drawer{
+    width:100vw;
+    top:0;
+    height:100%;
+    height:100dvh;
+  }
+  .drawer-action-bar{
+    top:max(14px, calc(env(safe-area-inset-top,0px) + 14px)) !important;
+    right:14px !important;
+  }
+  .drawer-body{
+    padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  }
+}
+
+
+@media(max-width:768px){
   /* Topbar right - tighter */
   .topbar > div:last-child{gap:2px!important;}
   /* Year review - keep visible */
@@ -686,6 +703,23 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .sp-desktop{display:flex!important;}
 .mob-only{display:none!important;}
 #btnMobileMenu{display:none;}
+
+@media(max-width:768px){
+  .detail-drawer{
+    width:100vw;
+    top:0;
+    height:100%;
+    height:100dvh;
+  }
+  .drawer-action-bar{
+    top:max(14px, calc(env(safe-area-inset-top,0px) + 14px)) !important;
+    right:14px !important;
+  }
+  .drawer-body{
+    padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  }
+}
+
 
 @media(max-width:768px){
   /* Topbar right - tighter */
@@ -4272,6 +4306,12 @@ function adjustMainPadding(){
   var bar=document.querySelector('.main-sticky');
   var content=document.querySelector('.main-content');
   if(bar&&content)content.style.paddingTop=(bar.offsetHeight+8)+'px';
+  // Also fix main-sticky top dynamically on iOS PWA
+  var safeTop=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sat')||'0')||0;
+  if(bar){
+    var topbarH=document.querySelector('.topbar')?.offsetHeight||56;
+    bar.style.top=topbarH+'px';
+  }
 }
 window.addEventListener('load',adjustMainPadding);
 // Close mobile sidebar when clicking main area
