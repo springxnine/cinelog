@@ -23,7 +23,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#f0ede8;color:#2c2c2c;min-height:100vh;}
 
-.topbar{background:#1e1e1e;color:white;padding:env(safe-area-inset-top,0) 28px 0;min-height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar{background:#1e1e1e;color:white;padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .topbar-brand{display:flex;align-items:center;gap:0;}
 .topbar-title{font-family:-apple-system,"SF Pro Display",system-ui,sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.3px;display:flex;align-items:center;gap:3px;line-height:1;}
 .topbar-sub{font-size:10px;color:rgba(255,255,255,0.3);line-height:1;font-family:"Space Grotesk",system-ui,sans-serif;font-weight:400;letter-spacing:0.8px;text-transform:uppercase;margin-left:6px;}
@@ -538,7 +538,7 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .pf-btn.active{background:#1e1e1e;color:white;border-color:#1e1e1e;}
 @media(max-width:768px){
   /* Topbar */
-  .topbar{padding:env(safe-area-inset-top,0) 12px 0;min-height:50px;}
+  .topbar{padding:0 12px;height:50px;}
   .topbar-sub{display:none;}
   .topbar-logo{font-size:16px;}
   .topbar-tagline{display:none;}
@@ -607,12 +607,21 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
 #btnMobileMenu{display:none;}
 
-/* iOS PWA specific */
+/* iOS PWA: extend topbar into status bar, center items */
 @supports (-webkit-touch-callout: none) {
-  body{
-    overscroll-behavior-y: auto;
-    -webkit-overflow-scrolling: touch;
+  .topbar{
+    padding-top:env(safe-area-inset-top,0px);
+    height:calc(50px + env(safe-area-inset-top,0px));
+    align-items:center;
   }
+}
+  .topbar > *{
+    margin-top:calc(env(safe-area-inset-top,0px) * 0.5);
+  }
+}
+
+
+
   .topbar{
     /* Taller to avoid buttons clipping under notch */
     padding-top:max(env(safe-area-inset-top,0px), 14px);
@@ -655,8 +664,8 @@ body.dark .modal-head h2{color:#f4f4f5;}
   /* Brand takes remaining space */
   .topbar-brand{flex:1;min-width:0;}
   /* Title font smaller on mobile */
-  .topbar-title{font-size:10px!important;gap:2px!important;line-height:1.2;}
-  .topbar-title svg{width:14px!important;height:14px!important;}
+  .topbar-title{font-size:13px!important;gap:4px!important;line-height:1;}
+  .topbar-title svg{width:18px!important;height:18px!important;}
 }
 
 
@@ -723,12 +732,21 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .mob-only{display:none!important;}
 #btnMobileMenu{display:none;}
 
-/* iOS PWA specific */
+/* iOS PWA: extend topbar into status bar, center items */
 @supports (-webkit-touch-callout: none) {
-  body{
-    overscroll-behavior-y: auto;
-    -webkit-overflow-scrolling: touch;
+  .topbar{
+    padding-top:env(safe-area-inset-top,0px);
+    height:calc(50px + env(safe-area-inset-top,0px));
+    align-items:center;
   }
+}
+  .topbar > *{
+    margin-top:calc(env(safe-area-inset-top,0px) * 0.5);
+  }
+}
+
+
+
   .topbar{
     /* Taller to avoid buttons clipping under notch */
     padding-top:max(env(safe-area-inset-top,0px), 14px);
@@ -771,8 +789,8 @@ body.dark .modal-head h2{color:#f4f4f5;}
   /* Brand takes remaining space */
   .topbar-brand{flex:1;min-width:0;}
   /* Title font smaller on mobile */
-  .topbar-title{font-size:10px!important;gap:2px!important;line-height:1.2;}
-  .topbar-title svg{width:14px!important;height:14px!important;}
+  .topbar-title{font-size:13px!important;gap:4px!important;line-height:1;}
+  .topbar-title svg{width:18px!important;height:18px!important;}
 }
 
 
@@ -786,7 +804,7 @@ body.dark .modal-head h2{color:#f4f4f5;}
   html,body{color-scheme:light!important;}
 
   /* Topbar */
-  .topbar{padding:env(safe-area-inset-top,0) 6px 0;min-height:50px;gap:4px;flex-wrap:nowrap;}
+  .topbar{padding:0 6px;height:50px;gap:4px;flex-wrap:nowrap;}
   .topbar-brand{flex:1;min-width:0;overflow:hidden;}
   .topbar-sub,.topbar-tagline{display:none;}
   .topbar-title{font-size:16px;white-space:nowrap;}
@@ -1352,6 +1370,10 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
       <div id="streakCard"></div>
       <div class="watch-insights" id="watchInsightsList"></div>
     </div>
+    <div class="sb-section" id="langSection" style="display:none">
+      <div class="sb-title"><span class="sb-title-text">Languages</span></div>
+      <div class="bar-chart" id="langChart"></div>
+    </div>
     <div class="sb-section plat-section" id="platSection">
       <div class="sb-title"><span class="sb-title-text">Platforms</span></div>
       <div class="bar-chart" id="cPlatform"></div>
@@ -1401,7 +1423,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
         <select class="sel tb-desktop" id="filterGenre"><option value="">All Genres</option></select>
         <select class="sel tb-desktop" id="filterPlatform"><option value="">All Platforms</option></select>
         <select class="sel tb-desktop" id="filterTrope"><option value="">All Tropes</option></select>
-        <select class="sel tb-desktop" id="filterRating"><option value="">Any Rating</option><option value="9">★ 9+</option><option value="8">★ 8+</option><option value="7">★ 7+</option><option value="5">★ 5+</option><option value="r0-5">★ ≤5</option></select>
+        <select class="sel tb-desktop" id="filterCountry"><option value="">All Countries</option></select>
         <select class="sel tb-desktop" id="sortBy">
           <option value="added">Recently Added</option>
           <option value="finish_date" selected>Recently Finished</option>
@@ -1420,7 +1442,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
         <select class="sel" id="filterGenreMob"><option value="">All Genres</option></select>
         <select class="sel" id="filterPlatformMob"><option value="">All Platforms</option></select>
         <select class="sel" id="filterTropeMob"><option value="">All Tropes</option></select>
-        <select class="sel" id="filterRatingMob"><option value="">Any Rating</option><option value="9">★ 9+</option><option value="8">★ 8+</option><option value="7">★ 7+</option><option value="5">★ 5+</option><option value="r0-5">★ ≤5</option></select>
+        <select class="sel" id="filterCountryMob"><option value="">All Countries</option></select>
       </div>
       <!-- Desktop status row -->
       <div class="status-pills" id="statusPills" style="display:flex;align-items:center;justify-content:space-between;">
@@ -1620,11 +1642,12 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
               <option value="">Select…</option>
               <option value="English">English</option><option value="Thai">Thai</option>
               <option value="Korean">Korean</option><option value="Japanese">Japanese</option>
-              <option value="Chinese">Chinese</option><option value="Spanish">Spanish</option>
+              <option value="Chinese">Chinese</option><option value="Mandarin">Mandarin</option><option value="Spanish">Spanish</option>
               <option value="French">French</option><option value="German">German</option>
               <option value="Italian">Italian</option><option value="Other">Other</option>
             </select>
           </div>
+          <div class="fg"><label>Origin Country <span style="font-weight:400;color:#bbb;font-size:10px;">auto-filled</span></label><input type="text" id="originCountryAdd" placeholder="e.g. US, KR, TH…" autocomplete="off"></div>
           <div class="fg"><label>Platform</label>
             <select id="platform">
               <option value="">Select…</option>
@@ -1775,11 +1798,12 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
               <option value="">Select…</option>
               <option value="English">English</option><option value="Thai">Thai</option>
               <option value="Korean">Korean</option><option value="Japanese">Japanese</option>
-              <option value="Chinese">Chinese</option><option value="Spanish">Spanish</option>
+              <option value="Chinese">Chinese</option><option value="Mandarin">Mandarin</option><option value="Spanish">Spanish</option>
               <option value="French">French</option><option value="German">German</option>
               <option value="Italian">Italian</option><option value="Other">Other</option>
             </select>
           </div>
+          <div class="fg"><label>Origin Country <span style="font-weight:400;color:#bbb;font-size:10px;">auto-filled</span></label><input type="text" id="originCountryEdit" placeholder="e.g. US, KR, TH…" autocomplete="off"></div>
           <div class="fg"><label>Platform</label>
             <select id="editPlatform">
               <option value="">Select…</option>
@@ -1956,18 +1980,22 @@ const GENRES=['Action','Adventure','Animation','Comedy','Crime','Drama','Family'
 const TROPES_BY_CAT={
   '💕 Romance':['Enemies to Lovers','Slow Burn','Fake Dating','Second Chance','Love Triangle','Forbidden Love','Forced Proximity','Childhood Friends','Opposites Attract','One Bed','Power Couple','Unrequited Love','Friends to Lovers','Age Gap','Grumpy x Sunshine','Workplace Romance','Marriage of Convenience','Soulmates','Secret Royalty'],
   '👨‍👩‍👧 Family & Found Family':['Found Family','Mentor & Student','Sibling Rivalry','Parental Issues'],
-  '🌱 Identity & Growth':['Coming of Age','Redemption Arc','Hidden Identity','Fish Out of Water','Underdog','Self-Discovery','Imposter Syndrome'],
+  '🌱 Identity & Growth':['Coming of Age','Self-Discovery','Redemption Arc','Hidden Identity','Fish Out of Water','Underdog','Imposter Syndrome'],
+  
   '⚔️ Plot & Conflict':['Chosen One','Revenge Plot','Rivals','Political Intrigue','Survival','Heist','Time Loop','Road Trip','Unreliable Narrator','Mystery Box','Whodunit'],
-  '🎭 Character Dynamics':['Amnesia','Odd Couple','Bromance','Anti-Hero','I Can Fix Him','Class Disparity','Morally Grey'],
+  '🎭 Character Dynamics':['Amnesia','Odd Couple','Bromance','Anti-Hero','I Can Fix Him','Class Disparity','Morally Grey','Genius x Ordinary Girl','Tsundere'],
 };
 const TROPES=Object.values(TROPES_BY_CAT).flat();
 const ELEMENTS_BY_CAT={
-  '🎓 Life & Setting':['High School','College','Workplace','Small Town','High Society'],
+  '🎓 Life & Setting':['High School','College','Workplace','Small Town','High Society','Summer Vacation'],
   '🎤 Lifestyle & Culture':['Music','Dance','Fashion','Sports','Celebrity'],
-  '🌍 Situation & World':['Supernatural','Time Travel','Survival','Historical','Mafia','Royalty','Politics'],
-  '🧠 Core Themes':['Self-discovery','Coming of Age','Friendship','Family','Self-love'],
+  '🌍 Situation & World':['Supernatural','Time Travel','Survival','Historical','Mafia','Royalty','Politics','Marriage'],
+  '🧠 Core Themes':['Friendship','Family','Self-love'],
 };
 const ELEMENTS=Object.values(ELEMENTS_BY_CAT).flat();
+const COUNTRY_MAP={'US':'USA','GB':'UK','TW':'Taiwan','KR':'Korea','TH':'Thailand','JP':'Japan','CN':'China','HK':'Hong Kong','IN':'India','FR':'France','DE':'Germany','IT':'Italy','ES':'Spain','MX':'Mexico','BR':'Brazil','AU':'Australia','CA':'Canada','PH':'Philippines','ID':'Indonesia','MY':'Malaysia','SG':'Singapore','VN':'Vietnam','TR':'Turkey','AR':'Argentina','CO':'Colombia','PT':'Portugal','NL':'Netherlands','SE':'Sweden','NO':'Norway','DK':'Denmark','FI':'Finland','RU':'Russia','PL':'Poland','CZ':'Czech Republic','BE':'Belgium','CH':'Switzerland','AT':'Austria','NZ':'New Zealand','ZA':'South Africa','EG':'Egypt','NG':'Nigeria','PK':'Pakistan','BD':'Bangladesh','LK':'Sri Lanka'};
+function countryName(code){return COUNTRY_MAP[code]||code;}
+
 
 // Status config: icon, label, pastel color
 const ST={
@@ -2208,7 +2236,7 @@ async function tmdbSearch(query,type){
         };
       }catch(e){
         const year=mt==='movie'?(r.release_date||'').substring(0,4):(r.first_air_date||'').substring(0,4);
-        return{id:r.id,mediaType:mt,title:mt==='movie'?(r.title||r.name):(r.name||r.title),year,release_date:mt==='movie'?(r.release_date||''):(r.first_air_date||''),poster_path:r.poster_path,backdrop_path:r.backdrop_path,genre_names:(r.genre_ids||[]).map(id=>gMap[id]).filter(Boolean).map(normalizeTmdbGenre),runtime_minutes:null,original_language:r.original_language,vote_average:r.vote_average};
+        return{id:r.id,mediaType:mt,title:mt==='movie'?(r.title||r.name):(r.name||r.title),year,release_date:mt==='movie'?(r.release_date||''):(r.first_air_date||''),poster_path:r.poster_path,backdrop_path:r.backdrop_path,genre_names:(r.genre_ids||[]).map(id=>gMap[id]).filter(Boolean).map(normalizeTmdbGenre),runtime_minutes:null,original_language:r.original_language,vote_average:r.vote_average,origin_country:(r.origin_country||[])[0]||''};
       }
     }));
     return detailed;
@@ -2262,13 +2290,17 @@ function applyTmdbResult(r){
     }
   }
 
-  // 3. Language
+  // 3. Language + Origin Country
   const langMap={'en':'English','th':'Thai','ko':'Korean','ja':'Japanese','zh':'Chinese','es':'Spanish','fr':'French','de':'German','it':'Italian','pt':'Portuguese'};
   const langEl=document.getElementById('language');
   if(langEl&&r.original_language){
     const langVal=langMap[r.original_language]||r.original_language;
     for(const opt of langEl.options){if(opt.value===langVal){langEl.value=langVal;break;}}
   }
+  const ocAddEl=document.getElementById('originCountryAdd');
+  // origin_country set by detailed fetch below
+  // Also try fetching detailed origin country
+  if(ocAddEl&&r.id&&r.mediaType){fetch(`https://api.themoviedb.org/3/${r.mediaType==='tv'?'tv':'movie'}/${r.id}?api_key=3fd2be6f0c70a2a598f084ddfb75487c&language=en-US`).then(res=>res.json()).then(d=>{const co=(d.origin_country||[])[0]||d.production_countries?.[0]?.iso_3166_1||'';if(co&&ocAddEl)ocAddEl.value=countryName(co);}).catch(()=>{});}
 
   // 4. Poster
   if(r.poster_path){
@@ -2376,6 +2408,9 @@ function applyTmdbResultEdit(r){
   if(titleEl)titleEl.value=r.title||'';
   const langMap={'en':'English','th':'Thai','ko':'Korean','ja':'Japanese','zh':'Chinese','es':'Spanish','fr':'French','de':'German','it':'Italian','pt':'Portuguese'};
   const langEl=document.getElementById('editLanguage');
+  const ocEditEl=document.getElementById('originCountryEdit');
+  // origin_country set by detailed fetch below
+  if(ocEditEl&&r.id&&r.mediaType){fetch(`https://api.themoviedb.org/3/${r.mediaType==='tv'?'tv':'movie'}/${r.id}?api_key=3fd2be6f0c70a2a598f084ddfb75487c&language=en-US`).then(res=>res.json()).then(d=>{const co=(d.origin_country||[])[0]||d.production_countries?.[0]?.iso_3166_1||'';if(co&&ocEditEl)ocEditEl.value=countryName(co);}).catch(()=>{});}
   if(langEl&&r.original_language){const v=langMap[r.original_language]||r.original_language;for(const o of langEl.options){if(o.value===v){langEl.value=v;break;}}}
   if(r.poster_path)setPoster('posterPreviewEdit','posterPlaceholderEdit','posterDataEdit',TMDB_IMG+'w500'+r.poster_path);
   if(r.backdrop_path){document.getElementById('backdropDataEdit').value=TMDB_IMG+'original'+r.backdrop_path;const bi=document.getElementById('backdropUrlEdit');if(bi)bi.value=TMDB_IMG+'original'+r.backdrop_path;}
@@ -2974,8 +3009,26 @@ function injectDynFields(pfx, type, status, data){
   if(typeEl&&stEl){
     const rebuild=()=>{
       const t=typeEl.value,s=stEl.value;
+      // Preserve current field values before rebuild
+      const curData={};
+      if(pfx!=='Add'){
+        const en=entries.find(e=>e.id===editId)||{};
+        // Snapshot current form values
+        const ratingEl=document.getElementById(pfx==='Add'?'rating':'editRating');
+        const seasonEl=document.getElementById(pfx+'Season');
+        const epEl=document.getElementById(pfx+'Episode');
+        const totalEl=document.getElementById(pfx+'TotalThisSeason');
+        const timesEl=document.getElementById(pfx+'Times');
+        Object.assign(curData,en,{
+          rating:ratingEl?parseInt(ratingEl.value):en.rating,
+          season:seasonEl?seasonEl.value:en.season,
+          episode:epEl?epEl.value:en.episode,
+          totalThisSeason:totalEl?totalEl.value:en.totalThisSeason,
+          timesWatched:timesEl?timesEl.value:en.timesWatched,
+        });
+      }
       buildRelease('releaseDateContainer'+pfx,'releaseLabel'+pfx,t==='series',null);
-      injectDynFields(pfx,t,s,{});
+      injectDynFields(pfx,t,s,curData);
       updateStatusVisibility(pfx);
     };
     typeEl.onchange=rebuild;stEl.onchange=rebuild;
@@ -3063,6 +3116,7 @@ function openForm(){
   injectDynFields('Add',type,status,{});
   updateStatusVisibility('Add');
   document.getElementById('formOverlay').classList.add('active');
+  setTimeout(()=>{const t=document.getElementById('title');if(t)t.focus();},100);
   // Scroll to top
   const fp=document.querySelector('.form-panel');if(fp)fp.scrollTop=0;
   setTimeout(()=>{
@@ -3128,6 +3182,7 @@ function addEntry(e){
     poster:document.getElementById('posterDataAdd').value||'',
     backdrop:document.getElementById('backdropDataAdd').value||'',
     collection:(document.getElementById('collectionAdd')||{value:''}).value.trim()||'',
+    originCountry:(document.getElementById('originCountryAdd')||{value:''}).value.trim()||'',
     tropes:(document.getElementById('tropeHiddenAdd')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
     elements:(document.getElementById('elemHiddenAdd')?.value||'').split(',').map(s=>s.trim()).filter(Boolean)
   });
@@ -3218,6 +3273,8 @@ function saveEdit(e){
   const pd=document.getElementById('posterDataEdit').value;if(pd)en.poster=pd;
   const bd=document.getElementById('backdropDataEdit').value;if(bd)en.backdrop=bd;
   en.collection=(document.getElementById('collectionEdit')||{value:''}).value.trim()||'';
+  en.originCountry=(document.getElementById('originCountryEdit')||{value:''}).value.trim()||'';
+  const ocEl=document.getElementById('originCountryEdit');if(ocEl)ocEl.value=en.originCountry||'';
   en.tropes=(document.getElementById('tropeHiddenEdit')?.value||'').split(',').map(s=>s.trim()).filter(Boolean);
   en.elements=(document.getElementById('elemHiddenEdit')?.value||'').split(',').map(s=>s.trim()).filter(Boolean);
   save();render();updateStats();updateGenreFilter();
@@ -3409,8 +3466,8 @@ function clearAllFilters(){
   const ms=document.getElementById('mobileStatusSel');if(ms)ms.value='all';
   const ftr=document.getElementById('filterTrope');if(ftr)ftr.value='';
   const ftrM=document.getElementById('filterTropeMob');if(ftrM)ftrM.value='';
-  const frg=document.getElementById('filterRating');if(frg)frg.value='';
-  const frgM=document.getElementById('filterRatingMob');if(frgM)frgM.value='';
+  const fco2=document.getElementById('filterCountry');if(fco2)fco2.value='';
+  const fco2M=document.getElementById('filterCountryMob');if(fco2M)fco2M.value='';
   document.getElementById('btnSearchClear').classList.remove('visible');
   document.querySelectorAll('.sp').forEach(b=>b.classList.toggle('active',b.dataset.s==='all'));
   statusFilter='all';
@@ -3467,17 +3524,14 @@ function render(){
   const fg=document.getElementById('filterGenre').value;
   const fp=document.getElementById('filterPlatform').value;
   const ftr=document.getElementById('filterTrope')?.value||'';
-  const frVal=document.getElementById('filterRating')?.value||'';
-  const frMin=frVal&&frVal!=='r0-5'?parseInt(frVal)||0:0;
-  const frMax=frVal==='r0-5'?5:0;
+  const fco=document.getElementById('filterCountry')?.value||'';
   const filtered=entries.filter(en=>
     (en.title.toLowerCase().includes(q)||(en.notes||'').toLowerCase().includes(q))
     &&(!ft||en.type===ft)&&(!fg||(en.genres||[]).includes(fg))
     &&(statusFilter==='all'||en.status===statusFilter)
     &&(!fp||en.platform===fp)
     &&(!ftr||(en.tropes||[]).includes(ftr)||(en.elements||[]).includes(ftr))
-    &&(!frMin||en.rating>=frMin)
-    &&(!frMax||(en.rating>0&&en.rating<=frMax&&en.status!=='watchlist'))
+    &&(!fco||en.originCountry===fco)
   );
   const sorted=getSorted(filtered);
   if(!sorted.length){
@@ -4175,6 +4229,7 @@ function openDrawer(id){
   if(en.runtime)meta.push({lbl:'Runtime',val:fmtRt(en.runtime)});
   // Platform shown as badge above — skip in meta grid
   if(en.language)meta.push({lbl:'Language',val:esc(en.language)});
+  if(en.originCountry)meta.push({lbl:'Country',val:esc(en.originCountry)});
   if(en.type==='series'&&(en.status==='watched'||en.status==='favorite')&&en.seasonsWatched)meta.push({lbl:'Seasons',val:en.seasonsWatched});
   if(en.type==='series'&&en.status==='onhold'&&en.watchedUpToSeason)meta.push({lbl:'Watched to',val:'S'+en.watchedUpToSeason});
   if(en.type==='series'&&(en.status==='watching')&&en.season)meta.push({lbl:'At',val:'S'+en.season+(en.episode?' E'+en.episode:'')});
@@ -4337,7 +4392,7 @@ document.getElementById('formOverlay').addEventListener('mouseup',e=>{if(_overla
 });
 
 load();render();updateStats();updateGenreFilter();initDarkMode();buildAutocomplete();initTmdbSearch();setCardView('poster');
-setTimeout(function(){if(typeof renderGoal==='function'){renderGoal();if(typeof loadGoalFromFirebase==='function')loadGoalFromFirebase();}},100);
+setTimeout(function(){if(typeof renderGoal==='function'){renderGoal();if(typeof loadGoalFromFirebase==='function')loadGoalFromFirebase();}if(typeof renderLangChart==='function')renderLangChart();},100);
 
 // Fix content offset after toolbar renders
 function adjustMainPadding(){
@@ -4601,6 +4656,19 @@ document.addEventListener('keydown',e=>{
 
 <style>
 /* Ep Log list in drawer */
+
+.ep-season-group{margin-bottom:6px;}
+.ep-season-hdr{width:100%;display:flex;align-items:center;gap:8px;padding:8px 12px;background:#f4f4f5;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;color:#374151;text-align:left;transition:background 0.15s;}
+.ep-season-hdr:hover{background:#e9e9eb;}
+.ep-season-hdr.open{background:#eef2ff;color:#4f46e5;border-radius:8px 8px 0 0;}
+.ep-season-meta{margin-left:auto;font-weight:500;color:#9ca3af;font-size:11px;}
+.ep-season-chevron{font-size:10px;color:#9ca3af;}
+.ep-season-hdr.open .ep-season-chevron{color:#6366f1;}
+.ep-season-body{background:#fafafa;border-radius:0 0 8px 8px;padding:6px;margin-bottom:2px;}
+body.dark .ep-season-hdr{background:#27272a;color:#d1d5db;}
+body.dark .ep-season-hdr.open{background:#1e1b4b;color:#818cf8;}
+body.dark .ep-season-body{background:#1f1f23;}
+
 .ep-log-item{display:flex;align-items:center;gap:10px;padding:7px 10px;background:#f8f8f8;border-radius:8px;margin-bottom:5px;font-size:12px;}
 .ep-log-date{color:#aaa;font-weight:600;min-width:68px;font-size:10px;}
 .ep-log-info{flex:1;color:#1a1a1a;font-weight:600;}
@@ -4732,16 +4800,47 @@ function renderDrawerEpLog(en){
   if(!sec||!list)return;
   if(en.type!=='series'){sec.style.display='none';return;}
   sec.style.display='block';
-  const logs=(en.epLogs||[]).slice().reverse();
+  const logs=(en.epLogs||[]);
   if(!logs.length){list.innerHTML='<div style="font-size:11px;color:#ccc;padding:6px 0;">No episodes logged yet. Tap + Ep to start.</div>';return;}
   const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  list.innerHTML=logs.map((log,i)=>{
-    const d=log.date?new Date(log.date+'T00:00:00'):null;
-    const dateLabel=d?MN[d.getMonth()]+' '+d.getDate():'No date';
-    const _p=n=>String(n).padStart(2,'0');const epLabel=`S${_p(log.season)}E${_p(log.episode)}${log.count>1?' (×'+log.count+')':''}`;
-    const origIdx=en.epLogs.length-1-i;
-    return`<div class="ep-log-item"><span class="ep-log-date">${dateLabel}</span><span class="ep-log-info">${epLabel}</span><button class="ep-log-del" onclick="deleteEpLog(${en.id},${origIdx})">✕</button></div>`;
+  const _p=n=>String(n).padStart(2,'0');
+
+  // Group by season
+  const bySeason={};
+  logs.forEach((log,origIdx)=>{
+    const s=log.season||1;
+    if(!bySeason[s])bySeason[s]=[];
+    bySeason[s].push({log,origIdx});
+  });
+
+  const seasons=Object.keys(bySeason).map(Number).sort((a,b)=>b-a);
+  const currentSeason=en.season||seasons[0];
+
+  list.innerHTML=seasons.map(s=>{
+    const items=bySeason[s];
+    const isOpen=s===currentSeason;
+    const epCount=items.reduce((n,{log})=>n+(log.count||1),0);
+    const rows=items.slice().reverse().map(({log,origIdx})=>{
+      const d=log.date?new Date(log.date+'T00:00:00'):null;
+      const dateLabel=d?MN[d.getMonth()]+' '+d.getDate():'No date';
+      const epLabel=`S${_p(log.season)}E${_p(log.episode)}${log.count>1?' (×'+log.count+')':''}`;
+      return`<div class="ep-log-item"><span class="ep-log-date">${dateLabel}</span><span class="ep-log-info">${epLabel}</span><button class="ep-log-del" onclick="deleteEpLog(${en.id},${origIdx})">✕</button></div>`;
+    }).join('');
+    return`<div class="ep-season-group">
+      <button class="ep-season-hdr" onclick="this.classList.toggle('open');this.nextElementSibling.style.display=this.classList.contains('open')?'block':'none'">
+        <span>Season ${s}</span>
+        <span class="ep-season-meta">${epCount} ep${epCount!==1?'s':''}</span>
+        <span class="ep-season-chevron">${isOpen?'▴':'▾'}</span>
+      </button>
+      <div class="ep-season-body" style="display:${isOpen?'block':'none'}">${rows}</div>
+    </div>`;
   }).join('');
+
+  // Init open state for current season
+  list.querySelectorAll('.ep-season-hdr').forEach(btn=>{
+    const bodyEl=btn.nextElementSibling;
+    if(bodyEl.style.display==='block')btn.classList.add('open');
+  });
 }
 
 function deleteEpLog(entryId,idx){
@@ -4865,7 +4964,25 @@ function renderTasteProfile(){
 
 // ── Patch updateStats ──
 const _origUS=updateStats;
-updateStats=function(){_origUS();renderGoal();detectBinge();renderTasteProfile();};
+
+function renderLangChart(){
+  const src=entries.filter(e=>e.language&&(e.status==='watched'||e.status==='favorite'));
+  const sec=document.getElementById('langSection');
+  const el=document.getElementById('langChart');
+  if(!sec||!el||!src.length){if(sec)sec.style.display='none';return;}
+  sec.style.display='block';
+  const counts={};src.forEach(e=>{counts[e.language]=(counts[e.language]||0)+1;});
+  const total=src.length;
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const max=sorted[0][1];
+  el.innerHTML=sorted.map(([lang,n])=>{
+    const pct=Math.round(n/total*100);
+    const w=Math.round(n/max*100);
+    return`<div class="bar-row"><span class="bar-lbl">${lang}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%"></div></div><span class="bar-cnt">${pct}%</span></div>`;
+  }).join('');
+}
+
+updateStats=function(){_origUS();renderGoal();detectBinge();renderTasteProfile();renderLangChart();};
 
 // ── Patch openDrawer — bind +Ep, ep log, and AI ──
 const _origOD=openDrawer;
@@ -5096,7 +5213,7 @@ body.dark .ai-result-box{background:#1a1a2e;border-color:#312e81;color:#e4e4e4;}
 <script>
 
 // Sync trope/rating mobile filters
-['filterTrope','filterRating'].forEach(id=>{
+['filterTrope','filterCountry'].forEach(id=>{
   const desk=document.getElementById(id);
   const mob=document.getElementById(id+'Mob');
   if(!desk||!mob)return;
@@ -5119,6 +5236,15 @@ function syncMobileDropdowns(){
   const dp=document.getElementById('filterPlatform'),mp=document.getElementById('filterPlatformMob');
   if(dp&&mp){const cv=mp.value;mp.innerHTML=dp.innerHTML;mp.value=cv||'';}
 }
+function populateCountryFilter(){
+  const sel=document.getElementById('filterCountry');
+  const selM=document.getElementById('filterCountryMob');
+  if(!sel)return;
+  const countries=[...new Set(entries.map(e=>e.originCountry).filter(Boolean))].sort();
+  const opts='<option value="">All Countries</option>'+countries.map(co=>`<option value="${co}">${co}</option>`).join('');
+  sel.innerHTML=opts;
+  if(selM)selM.innerHTML=opts;
+}
 function populateTropeFilter(){
   const sel=document.getElementById('filterTrope');
   const selM=document.getElementById('filterTropeMob');
@@ -5130,7 +5256,7 @@ function populateTropeFilter(){
   if(selM)selM.innerHTML=opts;
 }
 const _origUGF=updateGenreFilter;
-updateGenreFilter=function(){_origUGF();syncMobileDropdowns();populateTropeFilter();};
+updateGenreFilter=function(){_origUGF();syncMobileDropdowns();populateTropeFilter();populateCountryFilter();};
 // Also sync on load
 window.addEventListener('load',function(){setTimeout(()=>{syncMobileDropdowns();populateTropeFilter();},300);});
 </script>
