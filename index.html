@@ -607,13 +607,16 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
 #btnMobileMenu{display:none;}
 
-/* iOS PWA: extend topbar into status bar, center items */
+/* iOS PWA: push topbar below status bar */
 @supports (-webkit-touch-callout: none) {
   .topbar{
     padding-top:env(safe-area-inset-top,0px);
     height:calc(50px + env(safe-area-inset-top,0px));
-    align-items:center;
+    align-items:flex-end;
+    padding-bottom:8px;
+    box-sizing:border-box;
   }
+}
 }
   .topbar > *{
     margin-top:calc(env(safe-area-inset-top,0px) * 0.5);
@@ -660,12 +663,12 @@ body.dark .modal-head h2{color:#f4f4f5;}
   /* Dark toggle smaller */
   .btn-dark-toggle{font-size:14px;padding:3px 4px;}
   /* Add Entry - match backup button height */
-  .btn.btn-light{font-size:11px;padding:6px 8px;}
+  .btn.btn-light{font-size:11px;padding:6px 8px;height:auto;}
   /* Brand takes remaining space */
   .topbar-brand{flex:1;min-width:0;}
   /* Title font smaller on mobile */
-  .topbar-title{font-size:13px!important;gap:4px!important;line-height:1;}
-  .topbar-title svg{width:18px!important;height:18px!important;}
+  .topbar-title{font-size:12px!important;gap:3px!important;line-height:1;}
+  .topbar-title svg{width:30px!important;height:30px!important;}
 }
 
 
@@ -732,13 +735,16 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .mob-only{display:none!important;}
 #btnMobileMenu{display:none;}
 
-/* iOS PWA: extend topbar into status bar, center items */
+/* iOS PWA: push topbar below status bar */
 @supports (-webkit-touch-callout: none) {
   .topbar{
     padding-top:env(safe-area-inset-top,0px);
     height:calc(50px + env(safe-area-inset-top,0px));
-    align-items:center;
+    align-items:flex-end;
+    padding-bottom:8px;
+    box-sizing:border-box;
   }
+}
 }
   .topbar > *{
     margin-top:calc(env(safe-area-inset-top,0px) * 0.5);
@@ -785,12 +791,12 @@ body.dark .modal-head h2{color:#f4f4f5;}
   /* Dark toggle smaller */
   .btn-dark-toggle{font-size:14px;padding:3px 4px;}
   /* Add Entry - match backup button height */
-  .btn.btn-light{font-size:11px;padding:6px 8px;}
+  .btn.btn-light{font-size:11px;padding:6px 8px;height:auto;}
   /* Brand takes remaining space */
   .topbar-brand{flex:1;min-width:0;}
   /* Title font smaller on mobile */
-  .topbar-title{font-size:13px!important;gap:4px!important;line-height:1;}
-  .topbar-title svg{width:18px!important;height:18px!important;}
+  .topbar-title{font-size:12px!important;gap:3px!important;line-height:1;}
+  .topbar-title svg{width:30px!important;height:30px!important;}
 }
 
 
@@ -3009,7 +3015,6 @@ function injectDynFields(pfx, type, status, data){
   if(typeEl&&stEl){
     const rebuild=()=>{
       const t=typeEl.value,s=stEl.value;
-      // Preserve current field values before rebuild
       const curData={};
       if(pfx!=='Add'){
         const en=entries.find(e=>e.id===editId)||{};
@@ -3019,15 +3024,26 @@ function injectDynFields(pfx, type, status, data){
         const epEl=document.getElementById(pfx+'Episode');
         const totalEl=document.getElementById(pfx+'TotalThisSeason');
         const timesEl=document.getElementById(pfx+'Times');
+        // Snapshot release date BEFORE rebuild wipes it
+        const isSer=t==='series';
+        let rdSnap=null;
+        try{rdSnap=getReleaseVal('releaseDateContainer'+pfx,isSer);}catch(e){}
         Object.assign(curData,en,{
           rating:ratingEl?parseInt(ratingEl.value):en.rating,
           season:seasonEl?seasonEl.value:en.season,
           episode:epEl?epEl.value:en.episode,
           totalThisSeason:totalEl?totalEl.value:en.totalThisSeason,
           timesWatched:timesEl?timesEl.value:en.timesWatched,
+          releaseDate:rdSnap||en.releaseDate,
         });
+        // Rebuild release with snapshot
+        let rdVals=null;
+        if(isSer&&curData.releaseDate?.startsWith('{')){try{rdVals=JSON.parse(curData.releaseDate);}catch(e){}}
+        else if(!isSer&&curData.releaseDate)rdVals=curData.releaseDate;
+        buildRelease('releaseDateContainer'+pfx,'releaseLabel'+pfx,isSer,rdVals);
+      }else{
+        buildRelease('releaseDateContainer'+pfx,'releaseLabel'+pfx,t==='series',null);
       }
-      buildRelease('releaseDateContainer'+pfx,'releaseLabel'+pfx,t==='series',null);
       injectDynFields(pfx,t,s,curData);
       updateStatusVisibility(pfx);
     };
@@ -3222,6 +3238,7 @@ function openEdit(id){
   document.getElementById('editRatingValue').textContent=en.rating;
   document.getElementById('editLanguage').value=en.language||'';
   document.getElementById('collectionEdit').value=en.collection||'';
+  const ocEditLoad=document.getElementById('originCountryEdit');if(ocEditLoad)ocEditLoad.value=en.originCountry||'';
   document.getElementById('editPlatform').value=en.platform||'';
   document.getElementById('editNotes').value=en.notes||'';
   setPoster('posterPreviewEdit','posterPlaceholderEdit','posterDataEdit',en.poster||'');
@@ -3903,7 +3920,7 @@ function renderWatchInsights(){
     const parts=[];
     if(monMovies[pk])parts.push(`🎬 ${monMovies[pk]}`);
     if(monSeries[pk])parts.push(`📺 ${monSeries[pk]}`);
-    if(monEps[pk])parts.push(`${monEps[pk]} eps`);
+    if(monEps[pk])parts.push(`📺 ${monEps[pk]} eps`);
     insights.push({ico:'🏆',lbl:'Peak month',val:peakMon,sub:parts.join(' · ')||'—'});
   }
   if(busiest)insights.push({ico:'⚡',lbl:'Busiest day',val:busiest,sub:busiestSub});
