@@ -607,15 +607,32 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
 #btnMobileMenu{display:none;}
 
-/* iOS PWA: push topbar below status bar */
-@supports (-webkit-touch-callout: none) {
-  .topbar{
+/* iOS PWA safe area - topbar sits below status bar */
+@media(max-width:768px){
+  body{
     padding-top:env(safe-area-inset-top,0px);
-    height:calc(50px + env(safe-area-inset-top,0px));
-    align-items:flex-end;
-    padding-bottom:8px;
-    box-sizing:border-box;
+    background:#1e1e1e; /* match topbar so padding area looks seamless */
   }
+  .topbar{
+    position:sticky;
+    top:0;
+    /* No extra padding needed - body padding pushes it down */
+  }
+  /* Main sticky must account for body padding too */
+  .main-sticky{
+    top:50px !important;
+  }
+  /* Reset body bg after topbar */
+  .dashboard{
+    background:#f0ede8;
+  }
+  body.dark .dashboard{
+    background:#111114;
+  }
+}
+
+
+
 }
 }
   .topbar > *{
@@ -668,7 +685,7 @@ body.dark .modal-head h2{color:#f4f4f5;}
   .topbar-brand{flex:1;min-width:0;}
   /* Title font smaller on mobile */
   .topbar-title{font-size:12px!important;gap:3px!important;line-height:1;}
-  .topbar-title svg{width:30px!important;height:30px!important;}
+  .topbar-title svg{width:40px!important;height:40px!important;}
 }
 
 
@@ -735,15 +752,32 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .mob-only{display:none!important;}
 #btnMobileMenu{display:none;}
 
-/* iOS PWA: push topbar below status bar */
-@supports (-webkit-touch-callout: none) {
-  .topbar{
+/* iOS PWA safe area - topbar sits below status bar */
+@media(max-width:768px){
+  body{
     padding-top:env(safe-area-inset-top,0px);
-    height:calc(50px + env(safe-area-inset-top,0px));
-    align-items:flex-end;
-    padding-bottom:8px;
-    box-sizing:border-box;
+    background:#1e1e1e; /* match topbar so padding area looks seamless */
   }
+  .topbar{
+    position:sticky;
+    top:0;
+    /* No extra padding needed - body padding pushes it down */
+  }
+  /* Main sticky must account for body padding too */
+  .main-sticky{
+    top:50px !important;
+  }
+  /* Reset body bg after topbar */
+  .dashboard{
+    background:#f0ede8;
+  }
+  body.dark .dashboard{
+    background:#111114;
+  }
+}
+
+
+
 }
 }
   .topbar > *{
@@ -796,7 +830,7 @@ body.dark .modal-head h2{color:#f4f4f5;}
   .topbar-brand{flex:1;min-width:0;}
   /* Title font smaller on mobile */
   .topbar-title{font-size:12px!important;gap:3px!important;line-height:1;}
-  .topbar-title svg{width:30px!important;height:30px!important;}
+  .topbar-title svg{width:40px!important;height:40px!important;}
 }
 
 
