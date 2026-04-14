@@ -607,29 +607,36 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
 #btnMobileMenu{display:none;}
 
-/* iOS PWA safe area - topbar sits below status bar */
+/* Mobile: fixed topbar so it never moves */
 @media(max-width:768px){
-  body{
-    padding-top:env(safe-area-inset-top,0px);
-    background:#1e1e1e; /* match topbar so padding area looks seamless */
-  }
   .topbar{
-    position:sticky;
+    position:fixed !important;
     top:0;
-    /* No extra padding needed - body padding pushes it down */
+    left:0;
+    right:0;
+    z-index:200;
+    /* Push content area below safe-area + topbar */
+    padding-top:env(safe-area-inset-top, 0px);
+    box-sizing:border-box;
+    height:calc(50px + env(safe-area-inset-top, 0px));
   }
-  /* Main sticky must account for body padding too */
-  .main-sticky{
-    top:50px !important;
+  .topbar > *{
+    /* Keep buttons vertically centered in the 50px zone below status bar */
+    margin-top:0;
+    align-self:flex-end;
+    margin-bottom:6px;
   }
-  /* Reset body bg after topbar */
+  /* Push everything below fixed topbar */
   .dashboard{
-    background:#f0ede8;
+    margin-top:calc(50px + env(safe-area-inset-top, 0px));
   }
-  body.dark .dashboard{
-    background:#111114;
+  .main-sticky{
+    top:calc(50px + env(safe-area-inset-top, 0px)) !important;
   }
 }
+
+
+
 
 
 
@@ -752,29 +759,36 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .mob-only{display:none!important;}
 #btnMobileMenu{display:none;}
 
-/* iOS PWA safe area - topbar sits below status bar */
+/* Mobile: fixed topbar so it never moves */
 @media(max-width:768px){
-  body{
-    padding-top:env(safe-area-inset-top,0px);
-    background:#1e1e1e; /* match topbar so padding area looks seamless */
-  }
   .topbar{
-    position:sticky;
+    position:fixed !important;
     top:0;
-    /* No extra padding needed - body padding pushes it down */
+    left:0;
+    right:0;
+    z-index:200;
+    /* Push content area below safe-area + topbar */
+    padding-top:env(safe-area-inset-top, 0px);
+    box-sizing:border-box;
+    height:calc(50px + env(safe-area-inset-top, 0px));
   }
-  /* Main sticky must account for body padding too */
-  .main-sticky{
-    top:50px !important;
+  .topbar > *{
+    /* Keep buttons vertically centered in the 50px zone below status bar */
+    margin-top:0;
+    align-self:flex-end;
+    margin-bottom:6px;
   }
-  /* Reset body bg after topbar */
+  /* Push everything below fixed topbar */
   .dashboard{
-    background:#f0ede8;
+    margin-top:calc(50px + env(safe-area-inset-top, 0px));
   }
-  body.dark .dashboard{
-    background:#111114;
+  .main-sticky{
+    top:calc(50px + env(safe-area-inset-top, 0px)) !important;
   }
 }
+
+
+
 
 
 
