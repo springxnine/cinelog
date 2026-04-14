@@ -607,33 +607,27 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
 #btnMobileMenu{display:none;}
 
-/* Mobile: fixed topbar so it never moves */
+/* Safe area for iOS PWA and all mobile */
+.topbar{
+  padding-top:env(safe-area-inset-top, 0px);
+  box-sizing:border-box;
+}
 @media(max-width:768px){
   .topbar{
     position:fixed !important;
-    top:0;
-    left:0;
-    right:0;
+    top:0;left:0;right:0;
     z-index:200;
-    /* Push content area below safe-area + topbar */
-    padding-top:env(safe-area-inset-top, 0px);
-    box-sizing:border-box;
     height:calc(50px + env(safe-area-inset-top, 0px));
+    align-items:flex-end;
+    padding-bottom:6px;
   }
-  .topbar > *{
-    /* Keep buttons vertically centered in the 50px zone below status bar */
-    margin-top:0;
-    align-self:flex-end;
-    margin-bottom:6px;
-  }
-  /* Push everything below fixed topbar */
-  .dashboard{
-    margin-top:calc(50px + env(safe-area-inset-top, 0px));
-  }
-  .main-sticky{
-    top:calc(50px + env(safe-area-inset-top, 0px)) !important;
-  }
+  .topbar > *{align-self:auto;}
+  .dashboard{margin-top:calc(50px + env(safe-area-inset-top, 0px));}
+  .main-sticky{top:calc(50px + env(safe-area-inset-top, 0px)) !important;}
 }
+
+
+
 
 
 
@@ -759,33 +753,27 @@ body.dark .modal-head h2{color:#f4f4f5;}
 .mob-only{display:none!important;}
 #btnMobileMenu{display:none;}
 
-/* Mobile: fixed topbar so it never moves */
+/* Safe area for iOS PWA and all mobile */
+.topbar{
+  padding-top:env(safe-area-inset-top, 0px);
+  box-sizing:border-box;
+}
 @media(max-width:768px){
   .topbar{
     position:fixed !important;
-    top:0;
-    left:0;
-    right:0;
+    top:0;left:0;right:0;
     z-index:200;
-    /* Push content area below safe-area + topbar */
-    padding-top:env(safe-area-inset-top, 0px);
-    box-sizing:border-box;
     height:calc(50px + env(safe-area-inset-top, 0px));
+    align-items:flex-end;
+    padding-bottom:6px;
   }
-  .topbar > *{
-    /* Keep buttons vertically centered in the 50px zone below status bar */
-    margin-top:0;
-    align-self:flex-end;
-    margin-bottom:6px;
-  }
-  /* Push everything below fixed topbar */
-  .dashboard{
-    margin-top:calc(50px + env(safe-area-inset-top, 0px));
-  }
-  .main-sticky{
-    top:calc(50px + env(safe-area-inset-top, 0px)) !important;
-  }
+  .topbar > *{align-self:auto;}
+  .dashboard{margin-top:calc(50px + env(safe-area-inset-top, 0px));}
+  .main-sticky{top:calc(50px + env(safe-area-inset-top, 0px)) !important;}
 }
+
+
+
 
 
 
@@ -5377,4 +5365,34 @@ window.addEventListener('popstate',function(e){
   if(editOpen){closeModal();return;}
   // Nothing open — let browser handle normally (will exit/go back)
 });
+</script>
+
+<script>
+// iOS PWA safe area runtime fix
+(function(){
+  function applyIOSSafeArea(){
+    var sat = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sat')) || 0;
+    // Read via CSS trick
+    var el = document.createElement('div');
+    el.style.cssText = 'position:fixed;top:env(safe-area-inset-top,0px);height:0;pointer-events:none;';
+    document.body.appendChild(el);
+    var inset = el.getBoundingClientRect().top;
+    document.body.removeChild(el);
+    if(inset > 0){
+      var topbar = document.querySelector('.topbar');
+      var dashboard = document.querySelector('.dashboard');
+      var mainSticky = document.querySelector('.main-sticky');
+      if(topbar){
+        topbar.style.paddingTop = inset + 'px';
+        topbar.style.height = (50 + inset) + 'px';
+      }
+      if(dashboard) dashboard.style.marginTop = (50 + inset) + 'px';
+      if(mainSticky) mainSticky.style.top = (50 + inset) + 'px';
+    }
+  }
+  if(window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches){
+    document.addEventListener('DOMContentLoaded', applyIOSSafeArea);
+    window.addEventListener('load', applyIOSSafeArea);
+  }
+})();
 </script>
