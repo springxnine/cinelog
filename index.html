@@ -618,10 +618,10 @@ body.dark .modal-head h2{color:#f4f4f5;}
     top:0;left:0;right:0;
     z-index:200;
     height:calc(50px + env(safe-area-inset-top, 0px));
-    align-items:flex-end;
-    padding-bottom:6px;
+    align-items:center;
+    padding-top:env(safe-area-inset-top, 0px);
   }
-  .topbar > *{align-self:auto;}
+  .topbar > *{align-self:center;}
   .dashboard{margin-top:calc(50px + env(safe-area-inset-top, 0px));}
   .main-sticky{top:calc(50px + env(safe-area-inset-top, 0px)) !important;}
 }
@@ -645,13 +645,12 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
   .topbar{
     /* Taller to avoid buttons clipping under notch */
-    padding-top:max(env(safe-area-inset-top,0px), 14px);
-    padding-bottom:8px;
-    align-items:flex-end;
+    padding-top:env(safe-area-inset-top,0px);
+    align-items:center;
     box-sizing:border-box;
   }
   .topbar > *{
-    margin-bottom:0;
+    align-self:center;
   }
 }
 
@@ -764,10 +763,10 @@ body.dark .modal-head h2{color:#f4f4f5;}
     top:0;left:0;right:0;
     z-index:200;
     height:calc(50px + env(safe-area-inset-top, 0px));
-    align-items:flex-end;
-    padding-bottom:6px;
+    align-items:center;
+    padding-top:env(safe-area-inset-top, 0px);
   }
-  .topbar > *{align-self:auto;}
+  .topbar > *{align-self:center;}
   .dashboard{margin-top:calc(50px + env(safe-area-inset-top, 0px));}
   .main-sticky{top:calc(50px + env(safe-area-inset-top, 0px)) !important;}
 }
@@ -791,13 +790,12 @@ body.dark .modal-head h2{color:#f4f4f5;}
 
   .topbar{
     /* Taller to avoid buttons clipping under notch */
-    padding-top:max(env(safe-area-inset-top,0px), 14px);
-    padding-bottom:8px;
-    align-items:flex-end;
+    padding-top:env(safe-area-inset-top,0px);
+    align-items:center;
     box-sizing:border-box;
   }
   .topbar > *{
-    margin-bottom:0;
+    align-self:center;
   }
 }
 
@@ -5385,6 +5383,8 @@ window.addEventListener('popstate',function(e){
       if(topbar){
         topbar.style.paddingTop = inset + 'px';
         topbar.style.height = (50 + inset) + 'px';
+        topbar.style.alignItems = 'center';
+        topbar.style.paddingTop = inset + 'px';
       }
       if(dashboard) dashboard.style.marginTop = (50 + inset) + 'px';
       if(mainSticky) mainSticky.style.top = (50 + inset) + 'px';
