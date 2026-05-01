@@ -2928,6 +2928,13 @@ function dynFieldsHTML(pfx, type, status, data){
     const tw=data?.timesWatched||'1';
     html+=`<div class="fg"><label>Times Watched</label><input type="number" id="${pfx}Times" min="1" placeholder="1" value="${esc(tw)}"></div>`;
   }
+  if(isSeries&&isTodo){
+    // Series watchlist: premiere date
+    const nad=data?.nextAirDate||'';
+    html+=`<div class="fg"><label>Premiere Date <span style="font-weight:400;color:#bbb;font-size:10px;">optional · for Coming Up</span></label>
+      <input type="date" id="${pfx}NextAirDate" value="${esc(nad)}">
+    </div>`;
+  }
   return html;
 }
 
@@ -3224,7 +3231,7 @@ function addEntry(e){
     episode:getSEP('Add').episode,
     totalThisSeason:getTotalThisSeason('Add'),
     watchedUpToSeason:status==='onhold'?getWatchedUpToSeason('Add'):'',
-    nextAirDate:status==='onhold'?getNextAirDate('Add'):'',
+    nextAirDate:(status==='onhold'||status==='watchlist')?getNextAirDate('Add'):'',
     seasonsWatched:getSeasons('Add'),
     timesWatched:getTimes('Add'),
     rating:parseInt(document.getElementById('rating').value),
@@ -3316,7 +3323,7 @@ function saveEdit(e){
   en.episode=getSEP('Edit').episode;
   en.totalThisSeason=getTotalThisSeason('Edit');
   en.watchedUpToSeason=status==='onhold'?getWatchedUpToSeason('Edit'):'';
-  en.nextAirDate=status==='onhold'?getNextAirDate('Edit'):'';
+  en.nextAirDate=(status==='onhold'||(status==='watchlist'&&type==='series'))?getNextAirDate('Edit'):'';
   en.seasonsWatched=getSeasons('Edit');
   en.timesWatched=getTimes('Edit');
   en.rating=parseInt(document.getElementById('editRating').value);
@@ -3993,6 +4000,15 @@ function renderComingUp(){
     if(diff<0||diff>180)return; // already released or > 6 months away
     items.push({title:e.title,diff,sub:'Release',past:false,dateStr:fmtD(d)});
   });
+
+  // Series watchlist with nextAirDate (premiere/S1 air date)
+  entries.filter(e=>e.status==='watchlist'&&e.type==='series'&&e.nextAirDate).forEach(e=>{
+    const d=new Date(e.nextAirDate+'T00:00:00');
+    if(isNaN(d))return;
+    const diff=Math.round((d-now)/86400000);
+    if(diff<0||diff>180)return;
+    items.push({title:e.title,diff,sub:'Premieres',past:false,dateStr:fmtD(d)});
+  });
   const sec=document.getElementById('comingUpSection');
   const list=document.getElementById('comingUpList');
   if(!items.length){sec.style.display='none';return;}
@@ -4260,8 +4276,18 @@ function openDrawer(id){
   // Meta grid — Type moved to rating row, not here
   const meta=[];
   if(en.date&&(en.status==='watched'||en.status==='favorite'))meta.push({lbl:'Finished',val:fmtDate(en.date)});
-  // Release date for watchlist
-  if(en.status==='watchlist'&&en.releaseDate){
+  if(en.status==='watchlist'&&en.nextAirDate&&en.type==='series'){
+    const pd=new Date(en.nextAirDate+'T00:00:00');
+    if(!isNaN(pd)){
+      const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const pdStr=String(pd.getDate()).padStart(2,'0')+' '+mn[pd.getMonth()]+' '+pd.getFullYear();
+      const now2=new Date();now2.setHours(0,0,0,0);
+      const diff2=Math.round((pd-now2)/86400000);
+      const diffTxt=diff2>0?` · in ${diff2}d`:diff2===0?' · today!':' · aired';
+      meta.push({lbl:'Premieres',val:pdStr+diffTxt});
+    }
+  }
+  if(en.status==='watchlist'&&en.releaseDate&&!en.nextAirDate){
     let relStr='';
     if(en.releaseDate.startsWith('{')){try{const p=JSON.parse(en.releaseDate);relStr=p.s?p.s+'-01-01':'';}catch(x){}}
     else{relStr=en.releaseDate;}
