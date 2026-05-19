@@ -1462,6 +1462,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
         <select class="sel tb-desktop" id="filterType"><option value="">All Types</option><option value="series">📺 Series</option><option value="movie">🎬 Movie</option></select>
         <select class="sel tb-desktop" id="filterGenre"><option value="">All Genres</option></select>
         <select class="sel tb-desktop" id="filterPlatform"><option value="">All Platforms</option></select>
+        <select class="sel tb-desktop" id="filterTrope"><option value="">All Tropes</option></select>
         <select class="sel tb-desktop" id="filterCountry"><option value="">All Countries</option></select>
         <select class="sel tb-desktop" id="sortBy">
           <option value="added">Recently Added</option>
@@ -1480,6 +1481,7 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
         <select class="sel" id="filterTypeMob"><option value="">All Types</option><option value="series">📺 Series</option><option value="movie">🎬 Movie</option></select>
         <select class="sel" id="filterGenreMob"><option value="">All Genres</option></select>
         <select class="sel" id="filterPlatformMob"><option value="">All Platforms</option></select>
+        <select class="sel" id="filterTropeMob"><option value="">All Tropes</option></select>
         <select class="sel" id="filterCountryMob"><option value="">All Countries</option></select>
       </div>
       <!-- Desktop status row -->
@@ -1660,7 +1662,20 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           <button type="button" class="trope-browse-btn" id="tropeBrowseAdd">Browse all tropes ▾</button>
           <div class="trope-browse-panel" id="tropePanelAdd" style="display:none;"></div>
           <div class="form-hint">Search or browse · click to add</div>
-        </div><div class="fg"><label>Collection / Franchise <span style="font-weight:400;color:#bbb;font-size:10px;">(e.g. Culpa Series)</span></label><input type="text" id="collectionAdd" placeholder="e.g. Culpa Series, MCU, Fast & Furious…" autocomplete="off"></div>
+        </div>
+        <div class="fg">
+          <label>Elements <span style="font-weight:400;color:#bbb;font-size:10px;">optional · setting & vibe</span></label>
+          <div class="trope-search-wrap">
+            <input type="text" id="elemSearchAdd" placeholder="Search elements… e.g. High School" autocomplete="off" class="trope-search-input">
+            <div class="trope-suggest" id="elemSuggestAdd" style="display:none;"></div>
+          </div>
+          <div class="genre-chips" id="elemSelectedAdd" style="min-height:0;"></div>
+          <input type="hidden" id="elemHiddenAdd">
+          <button type="button" class="trope-browse-btn" id="elemBrowseAdd">Browse all elements ▾</button>
+          <div class="trope-browse-panel" id="elemPanelAdd" style="display:none;"></div>
+          <div class="form-hint">Search or browse · click to add</div>
+        </div>
+        <div class="fg"><label>Collection / Franchise <span style="font-weight:400;color:#bbb;font-size:10px;">(e.g. Culpa Series)</span></label><input type="text" id="collectionAdd" placeholder="e.g. Culpa Series, MCU, Fast & Furious…" autocomplete="off"></div>
         <div class="fg-row">
           <div class="fg"><label>Language</label>
             <select id="language">
@@ -1803,7 +1818,20 @@ body.dark .sz-btn.active{background:#e4e4e4;color:#111;border-color:#e4e4e4;}
           <button type="button" class="trope-browse-btn" id="tropeBrowseEdit">Browse all tropes ▾</button>
           <div class="trope-browse-panel" id="tropePanelEdit" style="display:none;"></div>
           <div class="form-hint">Search or browse · click to add</div>
-        </div><div class="fg"><label>Collection / Franchise <span style="font-weight:400;color:#bbb;font-size:10px;">(optional)</span></label><input type="text" id="collectionEdit" placeholder="e.g. Culpa Series, MCU, Fast & Furious…" autocomplete="off"></div>
+        </div>
+        <div class="fg">
+          <label>Elements <span style="font-weight:400;color:#bbb;font-size:10px;">optional · setting & vibe</span></label>
+          <div class="trope-search-wrap">
+            <input type="text" id="elemSearchEdit" placeholder="Search elements… e.g. High School" autocomplete="off" class="trope-search-input">
+            <div class="trope-suggest" id="elemSuggestEdit" style="display:none;"></div>
+          </div>
+          <div class="genre-chips" id="elemSelectedEdit" style="min-height:0;"></div>
+          <input type="hidden" id="elemHiddenEdit">
+          <button type="button" class="trope-browse-btn" id="elemBrowseEdit">Browse all elements ▾</button>
+          <div class="trope-browse-panel" id="elemPanelEdit" style="display:none;"></div>
+          <div class="form-hint">Search or browse · click to add</div>
+        </div>
+        <div class="fg"><label>Collection / Franchise <span style="font-weight:400;color:#bbb;font-size:10px;">(optional)</span></label><input type="text" id="collectionEdit" placeholder="e.g. Culpa Series, MCU, Fast & Furious…" autocomplete="off"></div>
         <div class="fg-row">
           <div class="fg"><label>Language</label>
             <select id="editLanguage">
@@ -1988,7 +2016,7 @@ window._fbReady = true;
 console.log('Firebase ready ✓');
 </script>
 <script>
-const GENRES=['Action','Adventure','Animation','Comedy','Crime','Drama','Family','Fantasy','Horror','K-Drama','Musical','Mystery','Romance','Sci-Fi','Superhero','Thriller','Young Adult'];
+const GENRES=['Action','Adventure','Animation','Comedy','Crime','Drama','Family','Fantasy','Horror','K-Drama','LGBTQ+','Musical','Mystery','Romance','Sci-Fi','Superhero','Thriller','Young Adult'];
 const TROPES_BY_CAT={
   '💕 Romance':['Enemies to Lovers','Slow Burn','Fake Dating','Second Chance','Love Triangle','Forbidden Love','Forced Proximity','Childhood Friends','Opposites Attract','One Bed','Power Couple','Unrequited Love','Friends to Lovers','Age Gap','Grumpy x Sunshine','Workplace Romance','Marriage of Convenience','Soulmates','Secret Royalty'],
   '👨‍👩‍👧 Family & Found Family':['Found Family','Mentor & Student','Sibling Rivalry','Parental Issues'],
@@ -2053,13 +2081,13 @@ function toast(msg,type='success'){
   el._t=setTimeout(()=>el.classList.remove('show'),2400);
 }
 function load(){
+  // Load from localStorage first (instant), then sync from Firebase
   try{entries=JSON.parse(localStorage.getItem('cinelog-data')||'[]');}catch(e){entries=[];}
   if(window._fbLoad){
     window._fbLoad().then(data=>{
       if(JSON.stringify(data)!==JSON.stringify(entries)){
         entries=data;
         render();updateStats();updateGenreFilter();
-        setTimeout(()=>{if(typeof populateCountryFilter==='function')populateCountryFilter();},200);
       }
     });
   }
@@ -3252,7 +3280,6 @@ function openEdit(id){
   document.getElementById('editLanguage').value=en.language||'';
   document.getElementById('collectionEdit').value=en.collection||'';
   const ocEditLoad=document.getElementById('originCountryEdit');if(ocEditLoad)ocEditLoad.value=en.originCountry||'';
-  const ocEditLoad=document.getElementById('originCountryEdit');if(ocEditLoad)ocEditLoad.value=en.originCountry||'';
   document.getElementById('editPlatform').value=en.platform||'';
   document.getElementById('editNotes').value=en.notes||'';
   setPoster('posterPreviewEdit','posterPlaceholderEdit','posterDataEdit',en.poster||'');
@@ -3495,6 +3522,8 @@ function clearAllFilters(){
   ['filterTypeMob','filterGenreMob','filterPlatformMob'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const sm=document.getElementById('sortByMob');if(sm)sm.value='finish_date';
   const ms=document.getElementById('mobileStatusSel');if(ms)ms.value='all';
+  const ftr=document.getElementById('filterTrope');if(ftr)ftr.value='';
+  const ftrM=document.getElementById('filterTropeMob');if(ftrM)ftrM.value='';
   const fco2=document.getElementById('filterCountry');if(fco2)fco2.value='';
   const fco2M=document.getElementById('filterCountryMob');if(fco2M)fco2M.value='';
   document.getElementById('btnSearchClear').classList.remove('visible');
@@ -3533,10 +3562,7 @@ function rts(en){
 function getSorted(arr){
   const s=document.getElementById('sortBy').value,c=[...arr];
   if(s==='added')c.sort((a,b)=>b.id-a.id);
-  else if(s==='finish_date'){c.sort((a,b)=>{// Watchlist (no finish date) goes to end
-    if(a.status==='watchlist'&&b.status!=='watchlist')return 1;
-    if(b.status==='watchlist'&&a.status!=='watchlist')return -1;
-    const da=a.date&&a.date!=='TBC'?new Date(a.date+'T00:00:00'):new Date(0);const db=b.date&&b.date!=='TBC'?new Date(b.date+'T00:00:00'):new Date(0);return db-da;});}
+  else if(s==='finish_date')c.sort((a,b)=>{const da=a.date&&a.date!=='TBC'?new Date(a.date+'T00:00:00'):new Date(0);const db=b.date&&b.date!=='TBC'?new Date(b.date+'T00:00:00'):new Date(0);return db-da;});
   else if(s==='release')c.sort((a,b)=>rts(b)-rts(a));
   else if(s==='release_asc')c.sort((a,b)=>rts(a)-rts(b));
   else if(s==='title')c.sort((a,b)=>a.title.localeCompare(b.title));
@@ -3555,13 +3581,14 @@ function render(){
   const ft=document.getElementById('filterType').value;
   const fg=document.getElementById('filterGenre').value;
   const fp=document.getElementById('filterPlatform').value;
-  const ftr='';
+  const ftr=document.getElementById('filterTrope')?.value||'';
   const fco=document.getElementById('filterCountry')?.value||'';
   const filtered=entries.filter(en=>
     (en.title.toLowerCase().includes(q)||(en.notes||'').toLowerCase().includes(q))
     &&(!ft||en.type===ft)&&(!fg||(en.genres||[]).includes(fg))
     &&(statusFilter==='all'||en.status===statusFilter)
     &&(!fp||en.platform===fp)
+    &&(!ftr||(en.tropes||[]).includes(ftr)||(en.elements||[]).includes(ftr))
     &&(!fco||en.originCountry===fco)
   );
   const sorted=getSorted(filtered);
@@ -3899,14 +3926,11 @@ function renderWatchInsights(){
   entries.forEach(e=>(e.epLogs||[]).filter(l=>l.date&&!l.date.endsWith('-01-01')).forEach(l=>{
     dayEps[l.date]=(dayEps[l.date]||0)+(l.count||1);
   }));
-  // Busiest = most eps, then most titles, then most recent as tiebreak
+  // Busiest = most eps, then most titles as tiebreak
   const allDays=[...new Set([...Object.keys(dayCount),...Object.keys(dayEps)])];
   const busiest=allDays.sort((a,b)=>{
     const epDiff=(dayEps[b]||0)-(dayEps[a]||0);
-    if(epDiff!==0)return epDiff;
-    const titleDiff=(dayCount[b]||0)-(dayCount[a]||0);
-    if(titleDiff!==0)return titleDiff;
-    return b.localeCompare(a); // most recent date wins
+    return epDiff!==0?epDiff:(dayCount[b]||0)-(dayCount[a]||0);
   })[0];
   const busiestEps=busiest?dayEps[busiest]||0:0;
   const busiestTitles=busiest?dayCount[busiest]||0:0;
@@ -3978,13 +4002,6 @@ function renderComingUp(){
   });
 
   // Series watchlist with nextAirDate (premiere/S1 air date)
-  entries.filter(e=>e.status==='watchlist'&&e.type==='series'&&e.nextAirDate).forEach(e=>{
-    const d=new Date(e.nextAirDate+'T00:00:00');
-    if(isNaN(d))return;
-    const diff=Math.round((d-now)/86400000);
-    if(diff<0||diff>180)return;
-    items.push({title:e.title,diff,sub:'Premieres',past:false,dateStr:fmtD(d)});
-  });
   entries.filter(e=>e.status==='watchlist'&&e.type==='series'&&e.nextAirDate).forEach(e=>{
     const d=new Date(e.nextAirDate+'T00:00:00');
     if(isNaN(d))return;
@@ -5042,7 +5059,7 @@ function renderLangChart(){
   }).join('');
 }
 
-updateStats=function(){_origUS();renderGoal();detectBinge();renderTasteProfile();renderLangChart();populateCountryFilter();};
+updateStats=function(){_origUS();renderGoal();detectBinge();renderTasteProfile();renderLangChart();};
 
 // ── Patch openDrawer — bind +Ep, ep log, and AI ──
 const _origOD=openDrawer;
@@ -5273,7 +5290,7 @@ body.dark .ai-result-box{background:#1a1a2e;border-color:#312e81;color:#e4e4e4;}
 <script>
 
 // Sync trope/rating mobile filters
-['filterCountry'].forEach(id=>{
+['filterTrope','filterCountry'].forEach(id=>{
   const desk=document.getElementById(id);
   const mob=document.getElementById(id+'Mob');
   if(!desk||!mob)return;
@@ -5305,10 +5322,20 @@ function populateCountryFilter(){
   sel.innerHTML=opts;
   if(selM)selM.innerHTML=opts;
 }
+function populateTropeFilter(){
+  const sel=document.getElementById('filterTrope');
+  const selM=document.getElementById('filterTropeMob');
+  if(!sel)return;
+  const used=new Set();
+  entries.forEach(e=>{(e.tropes||[]).forEach(t=>used.add(t));(e.elements||[]).forEach(t=>used.add(t));});
+  const opts='<option value="">All Tropes & Elements</option>'+[...used].sort().map(t=>`<option value="${t}">${t}</option>`).join('');
+  sel.innerHTML=opts;
+  if(selM)selM.innerHTML=opts;
+}
 const _origUGF=updateGenreFilter;
-updateGenreFilter=function(){_origUGF();syncMobileDropdowns();populateCountryFilter();};
+updateGenreFilter=function(){_origUGF();syncMobileDropdowns();populateTropeFilter();populateCountryFilter();};
 // Also sync on load
-window.addEventListener('load',function(){setTimeout(()=>{syncMobileDropdowns();populateCountryFilter();},300);});
+window.addEventListener('load',function(){setTimeout(()=>{syncMobileDropdowns();populateTropeFilter();},300);});
 </script>
 
 
